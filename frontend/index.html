@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PSX Forecast Lab</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&display=swap">
+  <style>
+    :root {
+      --bg: #0E1726;
+      --card: #131F33;
+      --ink: #E8ECEF;
+      --mut: #8A9BAE;
+      --line: #22324A;
+      --teal: #3FB8A6;
+      --amber: #E0A84A;
+      --slate: #7D8FA3;
+      --up: #4FAE7B;
+      --down: #D2694F;
+      color-scheme: dark;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 400 15px/1.5 Figtree, system-ui, sans-serif;
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      min-height: 100vh
+    }
+
+    aside {
+      padding: 24px 18px;
+      border-right: 1px solid var(--line);
+      background: var(--card)
+    }
+
+    aside h1 {
+      font-size: 20px;
+      margin: 0 0 2px
+    }
+
+    aside .sub {
+      color: var(--mut);
+      margin: 0 0 22px;
+      font-size: 13px
+    }
+
+    aside h2 {
+      font-size: 13px;
+      color: var(--mut);
+      font-weight: 500;
+      margin: 0 0 8px
+    }
+
+    .stk {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: none;
+      color: var(--ink);
+      font: 700 15px Figtree, sans-serif;
+      cursor: pointer
+    }
+
+    .stk small {
+      display: block;
+      font-weight: 400;
+      color: var(--mut);
+      font-size: 12px
+    }
+
+    .stk.on {
+      border-color: var(--mut);
+      background: var(--bg)
+    }
+
+    .stk:disabled {
+      opacity: .55;
+      cursor: default
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--mut);
+      margin-top: 22px
+    }
+
+    main {
+      padding: 24px 28px;
+      min-width: 0
+    }
+
+    nav {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 18px
+    }
+
+    nav button {
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: none;
+      color: var(--ink);
+      font: 500 14px Figtree, sans-serif;
+      cursor: pointer
+    }
+
+    nav button[aria-selected="true"] {
+      background: var(--line);
+      color: var(--ink);
+      border-color: var(--mut)
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 2px
+    }
+
+    section {
+      display: none
+    }
+
+    section.on {
+      display: block
+    }
+
+    h3 {
+      margin: 0 0 4px;
+      font-size: 22px
+    }
+
+    .lede {
+      color: var(--mut);
+      margin: 0 0 16px;
+      max-width: 70ch
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      overflow-x: auto
+    }
+
+    .ctrl {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: end;
+      margin-bottom: 12px
+    }
+
+    .ctrl label {
+      font-size: 13px;
+      color: var(--mut);
+      display: grid;
+      gap: 3px
+    }
+
+    input,
+    select {
+      font: inherit;
+      padding: 6px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--ink)
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px
+    }
+
+    .stat {
+      border-left: 1px solid var(--line);
+      padding: 2px 0 2px 14px
+    }
+
+    .stat b {
+      font-size: 22px;
+      font-weight: 500;
+      display: block
+    }
+
+    .stat span {
+      color: var(--mut);
+      font-size: 13px
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      min-width: 520px
+    }
+
+    svg text {
+      font-size: 11px;
+      fill: var(--mut)
+    }
+
+    .grid {
+      stroke: var(--line);
+      stroke-width: 1
+    }
+
+    .leg {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      margin-top: 8px
+    }
+
+    .leg i {
+      display: inline-block;
+      width: 18px;
+      height: 3px;
+      margin-right: 6px;
+      vertical-align: middle
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px solid;
+      margin-left: 8px;
+      vertical-align: middle;
+      font-weight: 500
+    }
+
+    .tag.real {
+      color: var(--ink);
+      border-color: var(--line)
+    }
+
+    .tag.demo {
+      color: var(--mut);
+      border-color: var(--mut);
+      border-style: dashed
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px
+    }
+
+    th,
+    td {
+      text-align: right;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left
+    }
+
+    th {
+      color: var(--mut);
+      font-weight: 500
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: min(310px, 46%) 1fr 52px;
+      gap: 10px;
+      align-items: center;
+      margin: 8px 0;
+      font-size: 14px
+    }
+
+    .bar div {
+      height: 10px;
+      border-radius: 5px;
+      background: var(--teal)
+    }
+
+    .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px
+    }
+
+    .ctx {
+      margin: 0 0 18px;
+      padding: 8px 12px;
+      border-left: 2px solid var(--mut);
+      color: var(--mut);
+      font-size: 13px
+    }
+
+    .ctx b {
+      color: var(--ink);
+      font-weight: 500
+    }
+
+    .bdg {
+      font-style: normal;
+      font-size: 11px;
+      padding: 1px 7px;
+      border: 1px solid var(--mut);
+      border-radius: 8px;
+      margin-left: 8px;
+      color: var(--ink);
+      white-space: nowrap
+    }
+
+    .bdg.full {
+      border-color: var(--teal);
+      color: var(--teal)
+    }
+
+    .fi {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px
+    }
+
+    .ft {
+      border: 1px dashed var(--line);
+      border-radius: 6px;
+      padding: 12px
+    }
+
+    .ft b {
+      display: block;
+      font-weight: 500
+    }
+
+    .ft span {
+      display: block;
+      color: var(--mut);
+      font-size: 13px
+    }
+
+    .ft i {
+      display: block;
+      height: 8px;
+      border: 1px dashed var(--mut);
+      border-radius: 4px;
+      margin: 10px 0 8px;
+      opacity: .6
+    }
+
+    @media (max-width:760px) {
+      body {
+        grid-template-columns: 1fr
+      }
+
+      aside {
+        border-right: 0;
+        border-bottom: 1px solid var(--line)
+      }
+
+      main {
+        padding: 18px 14px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside>
+    <h1>PSX Forecast Lab</h1>
+    <p class="sub">Research & experimentation dashboard</p>
+    <h2>Stocks</h2>
+    <button class="stk on" data-stock="UBL">UBL<small>United Bank Limited</small></button>
+    <button class="stk" disabled aria-disabled="true">HBL<small>awaiting HBL data and model</small></button>
+    <button class="stk" disabled>BWCL<small>coming soon</small></button>
+    <button class="stk" disabled>COLG<small>coming soon</small></button>
+    <button class="stk" disabled>DGKC<small>coming soon</small></button>
+    <button class="stk" disabled>EFERT<small>coming soon</small></button>
+    <button class="stk" disabled>FATIMA<small>coming soon</small></button>
+    <button class="stk" disabled>FCCL<small>coming soon</small></button>
+    <button class="stk" disabled>FFC<small>coming soon</small></button>
+    <button class="stk" disabled>ISIL<small>coming soon</small></button>
+    <button class="stk" disabled>LUCK<small>coming soon</small></button>
+    <button class="stk" disabled>MARI<small>coming soon</small></button>
+    <button class="stk" disabled>MCB<small>coming soon</small></button>
+    <button class="stk" disabled>MEBL<small>coming soon</small></button>
+    <button class="stk" disabled>MLCF<small>coming soon</small></button>
+    <button class="stk" disabled>NATF<small>coming soon</small></button>
+    <button class="stk" disabled>NBP<small>coming soon</small></button>
+    <button class="stk" disabled>NESTLE<small>coming soon</small></button>
+    <button class="stk" disabled>OGDC<small>coming soon</small></button>
+    <button class="stk" disabled>POL<small>coming soon</small></button>
+    <button class="stk" disabled>PPL<small>coming soon</small></button>
+    <button class="stk" disabled>UPFL<small>coming soon</small></button>
+    <p class="note"><i class="dot" style="background:var(--teal)"></i>Model preview<br><i class="dot"
+        style="background:var(--slate)"></i>Baseline preview<br><i class="dot"
+        style="background:var(--amber)"></i>Comparison preview</p>
+    <p class="note"><span class="tag real" style="margin:0">verified</span> means connected experiment output. <span
+        class="tag demo" style="margin:0">preview</span> means synthetic sample data.</p>
+  </aside>
+  <main>
+    <nav role="tablist" id="tabs">
+      <button role="tab" data-t="p" aria-selected="true">Predictions</button>
+      <button role="tab" data-t="h" aria-selected="false">Looking further ahead</button>
+      <button role="tab" data-t="w" aria-selected="false">How we test</button>
+      <button role="tab" data-t="c" aria-selected="false">Model comparison</button>
+    </nav>
+
+    <p class="ctx" role="status"><b id="stock-context">Loading experiment data…</b>
+      <span class="tag demo">SYNTHETIC PREVIEW</span>
+      The current backend returns generated sample values. Do not present its charts, metrics, or forecasts as research
+      results or live predictions.</p>
+    <section id="p" class="on">
+      <h3>What did the model predict?<span class="tag demo">demo</span></h3>
+      <p class="lede">Choose dates within the available prediction rows. This preview uses synthetic values; when
+        experiment outputs are connected, the chart should compare actual close, model prediction, and repeating
+        yesterday's close on the same held-out dates.</p>
+      <div class="ctrl"><label>From<input type="date" id="from" min="2025-01-01" max="2026-12-31"
+            value="2025-10-13"></label>
+        <label>To<input type="date" id="to" min="2025-01-01" max="2026-12-31" value="2026-06-30"></label>
+      </div>
+      <p class="note">The selected range currently filters this prediction chart and its preview metrics only. The
+        comparison and walk-forward sections show their full preview ranges.</p>
+      <div class="stats">
+        <div class="stat"><b id="sM">–</b><span>Preview MAPE, model</span></div>
+        <div class="stat"><b id="sN">–</b><span>Preview MAPE, repeat yesterday</span></div>
+        <div class="stat"><b id="sD">–</b><span>Preview rows shown</span></div>
+        <div class="stat"><b>1 trading day</b><span>Example horizon: next-day close</span></div>
+      </div>
+      <div class="panel">
+        <div id="c1"></div>
+      </div>
+    </section>
+
+    <section id="h">
+      <h3>How far ahead can we look?<span class="tag demo">preview</span></h3>
+      <p class="lede">The chart is synthetic preview data, not a result from the project models. In a verified
+        evaluation, 5 and 10 trading days are roughly one and two trading weeks; show historical error separately from
+        any future model estimate.</p>
+      <div class="panel">
+        <div id="c2"></div>
+      </div>
+      <div class="stats" id="fc"></div>
+    </section>
+
+    <section id="w">
+      <h3>How we test the model fairly<span class="tag demo">preview</span></h3>
+      <p class="lede">Walk-forward testing mimics real use: each test period follows its training data. Grey represents
+        training rows and teal represents test rows. These windows are generated placeholders; replace them with the
+        actual fold dates from the experiment before presenting results.</p>
+      <div class="panel">
+        <div id="wf"></div>
+      </div>
+    </section>
+
+    <section id="c">
+      <h3>Which inputs help?<span class="tag demo">preview</span></h3>
+      <p class="lede">This table is synthetic preview data; no verified ablation results are connected. For a fair
+        comparison, use model runs evaluated on the same held-out dates and compare each input combination with the
+        repeat-yesterday baseline. Lower error is better.</p>
+      <div class="stats" id="sum"></div>
+      <p class="lede"><b>How to read this:</b> an ablation compares performance when input groups are added or removed.
+        It does not by itself measure the causal importance of each individual feature.</p>
+      <h3 style="font-size:18px;margin-top:20px">Change in walk-forward RMSE vs repeat yesterday</h3>
+      <div class="panel">
+        <div id="dv"></div>
+      </div>
+      <h3 style="font-size:18px;margin-top:20px">Average miss (MAPE) in walk-forward testing</h3>
+      <div class="panel" id="ab"></div>
+      <h3 style="font-size:18px;margin-top:20px">What does each input group contribute?<span
+          class="tag demo">placeholder</span></h3>
+      <p class="lede">Feature importance has not been calculated yet. The charts above compare input combinations; they
+        do not measure how much each group contributes inside the full model.</p>
+      <div class="panel">
+        <div class="fi">
+          <div class="ft"><b>Price</b><i></i><span>Not yet calculated</span><span>Returns, volume, moving-average ratios
+              and volatility (7 daily features over 30 days)</span></div>
+          <div class="ft"><b>Technical indicators</b><i></i><span>Not yet calculated</span><span>EMA, MACD, SAR,
+              Bollinger Bands and Stochastic, plus price and volume (14 inputs)</span></div>
+          <div class="ft"><b>Financial statements</b><i></i><span>Not yet calculated</span><span>Revenue, net income,
+              EPS, total assets, cash and growth rates (9 inputs)</span></div>
+          <div class="ft"><b>News</b><i></i><span>Not yet calculated</span><span>6 news features plus 8 text-embedding
+              components</span></div>
+        </div>
+      </div>
+      <h3 style="font-size:18px;margin-top:20px">Detailed comparison</h3>
+      <div class="panel">
+        <table id="tb"></table>
+        <p class="note">Synthetic preview values only. Once connected, identify the actual test dates, number of runs,
+          walk-forward settings, metric units, and sample count beside this table.</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    const $ = s => document.querySelector(s);
+    /* ---------- API DATA LAYER ----------
+       Starter backend returns clearly labelled illustrative filler data.
+       Replace backend generators with real experiment outputs before evaluation.
+    */
+    const API_BASE = "http://127.0.0.1:8000";
+    let selectedStock = "UBL";
+    let API_DATA = null;
+
+    async function apiGet(path) {
+      const response = await fetch(`${API_BASE}${path}`);
+      if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+      return response.json();
+    }
+    async function loadStock(stock = selectedStock) {
+      selectedStock = stock;
+      API_DATA = await apiGet(`/api/dashboard/${stock}`);
+      const rows = API_DATA.predictions || [];
+      if (rows.length) {
+        const firstDate = rows[0].date;
+        const lastDate = rows[rows.length - 1].date;
+        ["#from", "#to"].forEach(selector => {
+          $(selector).min = firstDate;
+          $(selector).max = lastDate;
+        });
+        if ($("#from").value < firstDate || $("#from").value > lastDate) $("#from").value = firstDate;
+        if ($("#to").value < firstDate || $("#to").value > lastDate) $("#to").value = lastDate;
+      }
+      renderAll();
+    }
+    function getPredictions(stock, from, to) {
+      return (API_DATA?.predictions || []).filter(x => x.date >= from && x.date <= to);
+    }
+    /* ---------- charts ---------- */
+    const COL = { a: "var(--ink)", m: "var(--teal)", n: "var(--slate)", c: "var(--amber)" };
+    function line(el, labels, series, fmt) {
+      const W = 700, H = 300, m = { l: 46, r: 12, t: 10, b: 26 }, all = series.flatMap(s => s.v), lo = Math.min(...all), hi = Math.max(...all), pd = (hi - lo) * .06 || 1, y0 = lo - pd, y1 = hi + pd,
+      X = i => m.l + i * (W - m.l - m.r) / (labels.length - 1 || 1), Y = v => m.t + (1 - (v - y0) / (y1 - y0)) * (H - m.t - m.b); let g = "";
+      for (let k = 0; k <= 4; k++) { const v = y0 + (y1 - y0) * k / 4; g += `<line class="grid" x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${m.l - 6}" y="${Y(v) + 4}" text-anchor="end">${fmt(v)}</text>` }
+      const st = Math.max(1, Math.floor(labels.length / 5)); labels.forEach((l, i) => { if (i % st === 0 || labels.length < 8) g += `<text x="${X(i)}" y="${H - 6}" text-anchor="middle">${l}</text>` });
+      series.forEach(s => { g += `<polyline fill="none" style="stroke:${s.c}" stroke-width="${s.w || 2}" ${s.d ? 'stroke-dasharray="5 4"' : ""} points="${s.v.map((v, i) => X(i) + "," + Y(v)).join(" ")}"/>${labels.length < 8 ? s.v.map((v, i) => `<circle cx="${X(i)}" cy="${Y(v)}" r="4" style="fill:${s.c}"/>`).join("") : ""}` });
+      el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><div class="leg">${series.map(s => `<span><i style="background:${s.c}"></i>${s.n}</span>`).join("")}</div>`
+    }
+    const mape = (a, p) => a.reduce((s, x, i) => s + Math.abs(x - p[i]) / x, 0) / a.length * 100;
+    function renderP() {
+      if (!API_DATA) return;
+      const f = $("#from").value, t = $("#to").value, d = getPredictions(selectedStock, f, t);
+      if (f > t) { $("#c1").innerHTML = "<p>Choose a start date on or before the end date.</p>"; return }
+      if (d.length < 2) { $("#c1").innerHTML = "<p>Choose at least two trading days in the available evaluation period.</p>"; return }
+      const A = d.map(x => x.actual);
+      $("#sM").textContent = mape(A, d.map(x => x.model)).toFixed(2) + "%";
+      $("#sN").textContent = mape(A, d.map(x => x.naive)).toFixed(2) + "%";
+      $("#sD").textContent = d.length;
+      line($("#c1"), d.map(x => x.date.slice(2)), [{ n: "Sample actual close", v: A, c: COL.a, w: 2.2 }, { n: "Sample model prediction", v: d.map(x => x.model), c: COL.m }, { n: "Sample repeat-yesterday baseline", v: d.map(x => x.naive), c: COL.n, d: 1 }], v => v.toFixed(0));
+    }
+    function renderH() {
+      if (!API_DATA) return;
+      const horizons = (API_DATA.multi_horizon || []).filter(x => [1, 5, 10].includes(x.days));
+      line($("#c2"), horizons.map(x => x.label), [
+        { n: "Repeat yesterday", v: horizons.map(x => x.naive_mape), c: COL.n, d: 1 },
+        { n: "Model", v: horizons.map(x => x.model_mape), c: COL.m },
+      ], v => v.toFixed(2) + "%");
+      $("#fc").innerHTML = "<p class=\"note\">No verified future forecast is connected. Do not treat the preview horizon values as future price estimates.</p>";
+    }
+    function renderW() {
+      if (!API_DATA) return;
+      const wf = API_DATA.walk_forward, N = wf.total_days, W = 700, H = Math.max(160, wf.iterations.length * 30 + 45), sx = v => 10 + v / N * 680;
+      let g = "";
+      wf.iterations.forEach((it, k) => {
+        const y = 10 + k * 30;
+        g += `<rect x="${sx(it.train_start)}" y="${y}" width="${Math.max(2, sx(it.train_end) - sx(it.train_start))}" height="16" rx="2" style="fill:var(--slate)" opacity=".65"/>`;
+        g += `<rect x="${sx(it.test_start)}" y="${y}" width="${Math.max(3, sx(it.test_end) - sx(it.test_start))}" height="16" rx="2" style="fill:var(--teal)"/>`;
+        g += `<text x="12" y="${y + 12}">Iteration ${k + 1}</text>`;
+      });
+      $("#wf").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><div class="leg"><span><i style="background:var(--slate)"></i>Training window</span><span><i style="background:var(--teal)"></i>Testing window</span></div><p class="note">Illustrative walk-forward windows from the filler backend. Replace with your actual split indices.</p>`;
+    }
+    function renderSum() {
+      if (!API_DATA) return;
+      const rows = API_DATA.ablation;
+      const best = [...rows].sort((a, b) => a.walk_forward_mape - b.walk_forward_mape)[0];
+      const full = rows.find(x => x.name === "All features") || rows[rows.length - 1];
+      $("#sum").innerHTML = `<div class="stat"><b>${best.name}</b><span>Lowest synthetic walk-forward MAPE</span></div><div class="stat"><b>${full.walk_forward_rmse.toFixed(2)}</b><span>Synthetic all-features RMSE (Rs)</span></div><div class="stat"><b>${rows.length}</b><span>Configurations in this synthetic preview</span></div>`;
+    }
+    function diverge() {
+      if (!API_DATA) return;
+      const rows = API_DATA.ablation, base = API_DATA.naive_rmse;
+      const sorted = rows.map(r => [r.name, r.walk_forward_rmse - base]).sort((a, b) => a[1] - b[1]);
+      const mx = Math.max(...sorted.map(r => Math.abs(r[1]))) * 1.15 || 1, W = 700, L = 230, R = 620, c = (L + R) / 2, half = (R - L) / 2, rh = 30, H = sorted.length * rh + 40, X = v => c + v / mx * half;
+      let g = `<line x1="${c}" x2="${c}" y1="2" y2="${H - 26}" style="stroke:var(--mut)" stroke-width="1.5"/>`;
+      sorted.forEach(([n, d], i) => {
+        const y = 6 + i * rh, x = X(d), pos = d >= 0;
+        g += `<text x="${L - 12}" y="${y + 14}" text-anchor="end" style="fill:var(--ink)">${n}</text><rect x="${Math.min(c, x)}" y="${y + 3}" width="${Math.max(Math.abs(x - c), 2)}" height="16" rx="2" style="fill:var(--amber)"/><text x="${pos ? x + 6 : x - 6}" y="${y + 15}" text-anchor="${pos ? "start" : "end"}">${pos ? "+" : "−"}${Math.abs(d).toFixed(2)}</text>`;
+      });
+      g += `<text x="${c - 8}" y="${H - 8}" text-anchor="end">← better than baseline</text><text x="${c + 8}" y="${H - 8}" text-anchor="start">worse than baseline →</text>`;
+      $("#dv").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><p class="note">Illustrative walk-forward RMSE minus filler repeat-yesterday RMSE (Rs ${base.toFixed(2)}).</p>`;
+    }
+    function renderC() {
+      if (!API_DATA) return;
+      const rows = API_DATA.ablation;
+      $("#tb").innerHTML = `<tr><th>Inputs</th><th>Fixed split MAPE</th><th>Walk-forward MAPE</th><th>Walk-forward RMSE</th><th>Directional accuracy</th></tr>` +
+        `<tr><td>Repeat yesterday</td><td>—</td><td>—</td><td>Rs ${API_DATA.naive_rmse.toFixed(2)}</td><td>—</td></tr>` +
+        rows.map(r => `<tr><td>${r.name}</td><td>${r.fixed_split_mape.toFixed(2)}%</td><td>${r.walk_forward_mape.toFixed(2)}%</td><td>Rs ${r.walk_forward_rmse.toFixed(2)}</td><td>${r.directional_accuracy.toFixed(1)}%</td></tr>`).join("");
+      $("#ab").innerHTML = [["Repeat yesterday", API_DATA.naive_mape, "--slate"], ...rows.map(r => [r.name, r.walk_forward_mape, "--amber"])].map(([n, v, b]) => `<div class="bar"><span>${n}</span><div style="width:${Math.min(100, v / 5 * 100)}%;background:var(${b})"></div><span>${v.toFixed(2)}%</span></div>`).join("");
+    }
+    function renderAll() { renderP(); renderH(); renderW(); renderC(); renderSum(); diverge(); }
+    function showError(msg) { document.querySelector("main").insertAdjacentHTML("afterbegin", `<p class="ctx"><b>Backend connection:</b> ${msg}. Start the backend using the README instructions.</p>`); }
+    /* ---------- wiring ---------- */
+    $("#tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; document.querySelectorAll("#tabs button").forEach(x => x.setAttribute("aria-selected", x === b)); document.querySelectorAll("section").forEach(s => s.classList.toggle("on", s.id === b.dataset.t)) });
+    ["#from", "#to"].forEach(s => $(s).addEventListener("change", renderP));
+    document.querySelectorAll(".stk[data-stock]").forEach(b => b.addEventListener("click", async () => {
+      document.querySelectorAll(".stk").forEach(x => x.classList.toggle("on", x === b));
+      try { await loadStock(b.dataset.stock); $("#stock-context").textContent = `${selectedStock} dashboard preview — synthetic placeholder values only.` }
+      catch (e) { showError(e.message) }
+    }));
+    loadStock("UBL").then(() => { $("#stock-context").textContent = "UBL dashboard preview — synthetic placeholder values only." }).catch(e => showError(e.message));
+  </script>
+</body>
+
+</html>
