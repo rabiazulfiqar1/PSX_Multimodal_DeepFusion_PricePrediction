@@ -419,11 +419,10 @@
     <button class="stk" disabled>POL<small>coming soon</small></button>
     <button class="stk" disabled>PPL<small>coming soon</small></button>
     <button class="stk" disabled>UPFL<small>coming soon</small></button>
-    <p class="note"><i class="dot" style="background:var(--teal)"></i>Model preview<br><i class="dot"
-        style="background:var(--slate)"></i>Baseline preview<br><i class="dot"
-        style="background:var(--amber)"></i>Comparison preview</p>
-    <p class="note"><span class="tag real" style="margin:0">verified</span> means connected experiment output. <span
-        class="tag demo" style="margin:0">preview</span> means synthetic sample data.</p>
+    <p class="note"><i class="dot" style="background:var(--teal)"></i>Model<br><i class="dot"
+        style="background:var(--slate)"></i>Repeat yesterday<br><i class="dot"
+        style="background:var(--amber)"></i>Comparison</p>
+    
   </aside>
   <main>
     <nav role="tablist" id="tabs">
@@ -431,27 +430,24 @@
       <button role="tab" data-t="h" aria-selected="false">Looking further ahead</button>
       <button role="tab" data-t="w" aria-selected="false">How we test</button>
       <button role="tab" data-t="c" aria-selected="false">Model comparison</button>
+      <button role="tab" data-t="m" aria-selected="false">Market data</button>
+      <button role="tab" data-t="n" aria-selected="false">News</button>
     </nav>
 
-    <p class="ctx" role="status"><b id="stock-context">Loading experiment data…</b>
-      <span class="tag demo">SYNTHETIC PREVIEW</span>
-      The current backend returns generated sample values. Do not present its charts, metrics, or forecasts as research
-      results or live predictions.</p>
+    <p class="ctx" role="status"><b id="stock-context">Loading backtest results…</b> Walk-forward results from the notebook models. These are historical tests, not live predictions.</p>
     <section id="p" class="on">
-      <h3>What did the model predict?<span class="tag demo">demo</span></h3>
-      <p class="lede">Choose dates within the available prediction rows. This preview uses synthetic values; when
-        experiment outputs are connected, the chart should compare actual close, model prediction, and repeating
-        yesterday's close on the same held-out dates.</p>
+      <h3>What did the model predict?</h3>
+      <p class="lede">Choose dates within the available prediction rows. The chart compares actual close, model prediction, and repeat-yesterday close on the same held-out test dates.</p>
       <div class="ctrl"><label>From<input type="date" id="from" min="2025-01-01" max="2026-12-31"
             value="2025-10-13"></label>
         <label>To<input type="date" id="to" min="2025-01-01" max="2026-12-31" value="2026-06-30"></label>
+        <label>Model<select id="model"></select></label>
       </div>
-      <p class="note">The selected range currently filters this prediction chart and its preview metrics only. The
-        comparison and walk-forward sections show their full preview ranges.</p>
+      <p class="note">The selected range filters the chart and test-day count. The MAPE cards always show the full notebook test period. The comparison and walk-forward sections show the full test period.</p>
       <div class="stats">
-        <div class="stat"><b id="sM">–</b><span>Preview MAPE, model</span></div>
-        <div class="stat"><b id="sN">–</b><span>Preview MAPE, repeat yesterday</span></div>
-        <div class="stat"><b id="sD">–</b><span>Preview rows shown</span></div>
+        <div class="stat"><b id="sM">–</b><span>MAPE, model (notebook, full test period)</span></div>
+        <div class="stat"><b id="sN">–</b><span>MAPE, repeat yesterday (notebook, full test period)</span></div>
+        <div class="stat"><b id="sD">–</b><span>Test days shown</span></div>
         <div class="stat"><b>1 trading day</b><span>Example horizon: next-day close</span></div>
       </div>
       <div class="panel">
@@ -460,10 +456,8 @@
     </section>
 
     <section id="h">
-      <h3>How far ahead can we look?<span class="tag demo">preview</span></h3>
-      <p class="lede">The chart is synthetic preview data, not a result from the project models. In a verified
-        evaluation, 5 and 10 trading days are roughly one and two trading weeks; show historical error separately from
-        any future model estimate.</p>
+      <h3>How far ahead can we look?</h3>
+      <p class="lede">Historical error at 5 and 10 trading days (about one and two trading weeks) appears here once computed. Show it separately from any future estimate.</p>
       <div class="panel">
         <div id="c2"></div>
       </div>
@@ -471,20 +465,17 @@
     </section>
 
     <section id="w">
-      <h3>How we test the model fairly<span class="tag demo">preview</span></h3>
+      <h3>How we test the model fairly</h3>
       <p class="lede">Walk-forward testing mimics real use: each test period follows its training data. Grey represents
-        training rows and teal represents test rows. These windows are generated placeholders; replace them with the
-        actual fold dates from the experiment before presenting results.</p>
+        training rows and teal represents test rows. These are the rolling-window folds from the notebook.</p>
       <div class="panel">
         <div id="wf"></div>
       </div>
     </section>
 
     <section id="c">
-      <h3>Which inputs help?<span class="tag demo">preview</span></h3>
-      <p class="lede">This table is synthetic preview data; no verified ablation results are connected. For a fair
-        comparison, use model runs evaluated on the same held-out dates and compare each input combination with the
-        repeat-yesterday baseline. Lower error is better.</p>
+      <h3>Which inputs help?</h3>
+      <p class="lede">Each row is one input combination. Fixed-split values average three seeds on the held-out test period. Walk-forward values retrain every 21 trading days. Lower error is better.</p>
       <div class="stats" id="sum"></div>
       <p class="lede"><b>How to read this:</b> an ablation compares performance when input groups are added or removed.
         It does not by itself measure the causal importance of each individual feature.</p>
@@ -494,8 +485,7 @@
       </div>
       <h3 style="font-size:18px;margin-top:20px">Average miss (MAPE) in walk-forward testing</h3>
       <div class="panel" id="ab"></div>
-      <h3 style="font-size:18px;margin-top:20px">What does each input group contribute?<span
-          class="tag demo">placeholder</span></h3>
+      <h3 style="font-size:18px;margin-top:20px">What does each input group contribute?<span class="tag demo">not computed</span></h3>
       <p class="lede">Feature importance has not been calculated yet. The charts above compare input combinations; they
         do not measure how much each group contributes inside the full model.</p>
       <div class="panel">
@@ -513,16 +503,35 @@
       <h3 style="font-size:18px;margin-top:20px">Detailed comparison</h3>
       <div class="panel">
         <table id="tb"></table>
-        <p class="note">Synthetic preview values only. Once connected, identify the actual test dates, number of runs,
-          walk-forward settings, metric units, and sample count beside this table.</p>
+        <p class="note">Fixed-split values average three seeds on the held-out test period. Walk-forward values retrain every 21 trading days.</p>
       </div>
     </section>
+    <section id="m">
+      <h3>Market data</h3>
+      <p class="lede">Daily closing price with the 12- and 26-day exponential moving averages, from the Kaggle price file.
+        Fundamentals are the quarterly filings, imputed where values were missing.</p>
+      <div class="ctrl"><label>From<input type="date" id="mfrom"></label>
+        <label>To<input type="date" id="mto"></label></div>
+      <div class="panel"><div id="pc"></div></div>
+      <h3 style="font-size:18px;margin-top:20px">Quarterly fundamentals</h3>
+      <div class="panel" id="fund"></div>
+    </section>
+
+    <section id="n">
+      <h3>News sentiment</h3>
+      <p class="lede">Daily mean FinBERT sentiment for UBL news: positive minus negative probability, from -1 to +1.
+        Only days with at least one article are charted.</p>
+      <div class="stats" id="nstats"></div>
+      <div class="panel"><div id="nc"></div></div>
+      <h3 style="font-size:18px;margin-top:20px">Latest scored headlines</h3>
+      <div class="panel" id="heads"></div>
+    </section>
   </main>
-  <script>
+  <script type="module">
+    import { ubl } from "./ubl-client.js";
     const $ = s => document.querySelector(s);
     /* ---------- API DATA LAYER ----------
-       Starter backend returns clearly labelled illustrative filler data.
-       Replace backend generators with real experiment outputs before evaluation.
+       Reads real UBL backtest outputs from ubl_api.py (/api/dashboard/UBL).
     */
     const API_BASE = "http://127.0.0.1:8000";
     let selectedStock = "UBL";
@@ -549,8 +558,62 @@
       }
       renderAll();
     }
+    let PRED = [];     // predictions for the selected model
+    let PRICE = [];    // close and EMAs per trading day
+    let NB = null;     // notebook metrics for the selected model
     function getPredictions(stock, from, to) {
-      return (API_DATA?.predictions || []).filter(x => x.date >= from && x.date <= to);
+      return PRED.filter(x => x.date >= from && x.date <= to);
+    }
+    async function loadPredictions(model) {
+      const rows = await ubl.predictions(model);
+      PRED = rows.map(r => ({ date: r.DATE, actual: r.actual, model: r.pred, naive: r.prev_close }));
+      NB = await ubl.summary(model);
+      renderP();
+    }
+    const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    async function loadMarket() {
+      const [price, tech, fund] = await Promise.all([ubl.price(), ubl.technical(), ubl.fundamentals()]);
+      const T = Object.fromEntries(tech.map(t => [t.DATE, t]));
+      PRICE = price.map(p => ({ ...p, EMA_12: T[p.DATE]?.EMA_12 ?? null, EMA_26: T[p.DATE]?.EMA_26 ?? null }));
+      const first = PRICE[0].DATE, last = PRICE[PRICE.length - 1].DATE;
+      ["#mfrom", "#mto"].forEach(s => { $(s).min = first; $(s).max = last; });
+      $("#mfrom").value = first;
+      $("#mto").value = last;
+      renderMarket();
+      renderFund(fund);
+    }
+    function renderMarket() {
+      if (!PRICE.length) return;
+      const f = $("#mfrom").value, t = $("#mto").value;
+      const d = PRICE.filter(x => x.DATE >= f && x.DATE <= t && x.EMA_26 != null);
+      if (d.length < 2) { $("#pc").innerHTML = "<p>Choose a wider date range.</p>"; return; }
+      line($("#pc"), d.map(x => x.DATE.slice(2)), [
+        { n: "Close (PKR)", v: d.map(x => x.CLOSE), c: COL.a, w: 2 },
+        { n: "EMA 12", v: d.map(x => x.EMA_12), c: COL.m, w: 1.5 },
+        { n: "EMA 26", v: d.map(x => x.EMA_26), c: COL.c, w: 1.5 },
+      ], v => v.toFixed(0));
+    }
+    function renderFund(rows) {
+      const f = v => v == null ? "–" : Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
+      $("#fund").innerHTML = `<table><tr><th>Quarter</th><th>Filing date</th><th>Revenue</th><th>Net income</th><th>EPS (basic)</th><th>Revenue growth (YoY, %)</th></tr>` +
+        rows.map(r => `<tr><td>${esc(r.QUARTER ?? "–")}</td><td>${esc(r.DATE ?? "–")}</td><td>${f(r.Revenue)}</td><td>${f(r["Net Income"])}</td><td>${f(r["EPS (Basic)"])}</td><td>${f(r["Revenue Growth (YoY)"])}</td></tr>`).join("") +
+        `</table>`;
+    }
+    function renderNews(daily, arts) {
+      const days = daily.filter(x => x.has_news === 1);
+      const articles = days.reduce((s, x) => s + (x.n_articles || 0), 0);
+      const avg = days.reduce((s, x) => s + x.sent_mean, 0) / (days.length || 1);
+      $("#nstats").innerHTML = `<div class="stat"><b>${days.length}</b><span>Days with news</span></div>` +
+        `<div class="stat"><b>${articles}</b><span>Articles</span></div>` +
+        `<div class="stat"><b>${avg.toFixed(2)}</b><span>Average daily sentiment</span></div>`;
+      if (days.length >= 2) line($("#nc"), days.map(x => x.DATE.slice(2)), [{ n: "Mean sentiment", v: days.map(x => x.sent_mean), c: COL.m }], v => v.toFixed(2));
+      else $("#nc").innerHTML = "<p>Not enough news days to chart.</p>";
+      $("#heads").innerHTML = arts.length ? arts.map(a =>
+        `<div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)">` +
+        `<span style="color:var(--mut);white-space:nowrap">${esc(a.pub_date ?? "")}</span>` +
+        `<span style="flex:1">${esc(a.title ?? "(untitled)")}</span>` +
+        `<span style="white-space:nowrap">${Number(a.sentiment) >= 0 ? "+" : ""}${Number(a.sentiment).toFixed(2)}</span></div>`).join("")
+        : "<p>No articles.</p>";
     }
     /* ---------- charts ---------- */
     const COL = { a: "var(--ink)", m: "var(--teal)", n: "var(--slate)", c: "var(--amber)" };
@@ -562,26 +625,26 @@
       series.forEach(s => { g += `<polyline fill="none" style="stroke:${s.c}" stroke-width="${s.w || 2}" ${s.d ? 'stroke-dasharray="5 4"' : ""} points="${s.v.map((v, i) => X(i) + "," + Y(v)).join(" ")}"/>${labels.length < 8 ? s.v.map((v, i) => `<circle cx="${X(i)}" cy="${Y(v)}" r="4" style="fill:${s.c}"/>`).join("") : ""}` });
       el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><div class="leg">${series.map(s => `<span><i style="background:${s.c}"></i>${s.n}</span>`).join("")}</div>`
     }
-    const mape = (a, p) => a.reduce((s, x, i) => s + Math.abs(x - p[i]) / x, 0) / a.length * 100;
     function renderP() {
-      if (!API_DATA) return;
+      if (!PRED.length) return;
       const f = $("#from").value, t = $("#to").value, d = getPredictions(selectedStock, f, t);
       if (f > t) { $("#c1").innerHTML = "<p>Choose a start date on or before the end date.</p>"; return }
       if (d.length < 2) { $("#c1").innerHTML = "<p>Choose at least two trading days in the available evaluation period.</p>"; return }
       const A = d.map(x => x.actual);
-      $("#sM").textContent = mape(A, d.map(x => x.model)).toFixed(2) + "%";
-      $("#sN").textContent = mape(A, d.map(x => x.naive)).toFixed(2) + "%";
+      $("#sM").textContent = NB ? NB.metrics.MAPE.toFixed(2) + "%" : "–";
+      $("#sN").textContent = NB ? NB.naive_baseline.MAPE.toFixed(2) + "%" : "–";
       $("#sD").textContent = d.length;
       line($("#c1"), d.map(x => x.date.slice(2)), [{ n: "Sample actual close", v: A, c: COL.a, w: 2.2 }, { n: "Sample model prediction", v: d.map(x => x.model), c: COL.m }, { n: "Sample repeat-yesterday baseline", v: d.map(x => x.naive), c: COL.n, d: 1 }], v => v.toFixed(0));
     }
     function renderH() {
       if (!API_DATA) return;
       const horizons = (API_DATA.multi_horizon || []).filter(x => [1, 5, 10].includes(x.days));
+      if (!horizons.length) { $("#c2").innerHTML = '<p class="note">Multi-day horizons not computed yet.</p>'; $("#fc").innerHTML = ""; return; }
       line($("#c2"), horizons.map(x => x.label), [
         { n: "Repeat yesterday", v: horizons.map(x => x.naive_mape), c: COL.n, d: 1 },
         { n: "Model", v: horizons.map(x => x.model_mape), c: COL.m },
       ], v => v.toFixed(2) + "%");
-      $("#fc").innerHTML = "<p class=\"note\">No verified future forecast is connected. Do not treat the preview horizon values as future price estimates.</p>";
+      $("#fc").innerHTML = "<p class=\"note\">No future forecast is computed. Historical error is not a future price estimate.</p>";
     }
     function renderW() {
       if (!API_DATA) return;
@@ -593,14 +656,14 @@
         g += `<rect x="${sx(it.test_start)}" y="${y}" width="${Math.max(3, sx(it.test_end) - sx(it.test_start))}" height="16" rx="2" style="fill:var(--teal)"/>`;
         g += `<text x="12" y="${y + 12}">Iteration ${k + 1}</text>`;
       });
-      $("#wf").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><div class="leg"><span><i style="background:var(--slate)"></i>Training window</span><span><i style="background:var(--teal)"></i>Testing window</span></div><p class="note">Illustrative walk-forward windows from the filler backend. Replace with your actual split indices.</p>`;
+      $("#wf").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><div class="leg"><span><i style="background:var(--slate)"></i>Training window</span><span><i style="background:var(--teal)"></i>Testing window</span></div><p class="note">Rolling-window folds from the notebook. Grey = training rows, teal = test rows.</p>`;
     }
     function renderSum() {
       if (!API_DATA) return;
       const rows = API_DATA.ablation;
       const best = [...rows].sort((a, b) => a.walk_forward_mape - b.walk_forward_mape)[0];
       const full = rows.find(x => x.name === "All features") || rows[rows.length - 1];
-      $("#sum").innerHTML = `<div class="stat"><b>${best.name}</b><span>Lowest synthetic walk-forward MAPE</span></div><div class="stat"><b>${full.walk_forward_rmse.toFixed(2)}</b><span>Synthetic all-features RMSE (Rs)</span></div><div class="stat"><b>${rows.length}</b><span>Configurations in this synthetic preview</span></div>`;
+      $("#sum").innerHTML = `<div class="stat"><b>${best.name}</b><span>Lowest walk-forward MAPE</span></div><div class="stat"><b>${full.walk_forward_rmse.toFixed(2)}</b><span>All-features walk-forward RMSE (Rs)</span></div><div class="stat"><b>${rows.length}</b><span>Input combinations compared</span></div>`;
     }
     function diverge() {
       if (!API_DATA) return;
@@ -613,7 +676,7 @@
         g += `<text x="${L - 12}" y="${y + 14}" text-anchor="end" style="fill:var(--ink)">${n}</text><rect x="${Math.min(c, x)}" y="${y + 3}" width="${Math.max(Math.abs(x - c), 2)}" height="16" rx="2" style="fill:var(--amber)"/><text x="${pos ? x + 6 : x - 6}" y="${y + 15}" text-anchor="${pos ? "start" : "end"}">${pos ? "+" : "−"}${Math.abs(d).toFixed(2)}</text>`;
       });
       g += `<text x="${c - 8}" y="${H - 8}" text-anchor="end">← better than baseline</text><text x="${c + 8}" y="${H - 8}" text-anchor="start">worse than baseline →</text>`;
-      $("#dv").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><p class="note">Illustrative walk-forward RMSE minus filler repeat-yesterday RMSE (Rs ${base.toFixed(2)}).</p>`;
+      $("#dv").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><p class="note">Walk-forward RMSE minus repeat-yesterday RMSE (Rs ${base.toFixed(2)}).</p>`;
     }
     function renderC() {
       if (!API_DATA) return;
@@ -628,12 +691,26 @@
     /* ---------- wiring ---------- */
     $("#tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; document.querySelectorAll("#tabs button").forEach(x => x.setAttribute("aria-selected", x === b)); document.querySelectorAll("section").forEach(s => s.classList.toggle("on", s.id === b.dataset.t)) });
     ["#from", "#to"].forEach(s => $(s).addEventListener("change", renderP));
+    $("#model").addEventListener("change", e => loadPredictions(e.target.value).catch(showError));
+    ["#mfrom", "#mto"].forEach(s => $(s).addEventListener("change", renderMarket));
     document.querySelectorAll(".stk[data-stock]").forEach(b => b.addEventListener("click", async () => {
       document.querySelectorAll(".stk").forEach(x => x.classList.toggle("on", x === b));
-      try { await loadStock(b.dataset.stock); $("#stock-context").textContent = `${selectedStock} dashboard preview — synthetic placeholder values only.` }
+      try { await loadStock(b.dataset.stock); $("#stock-context").textContent = `${selectedStock}: walk-forward backtest results (historical, not live forecasts).` }
       catch (e) { showError(e.message) }
     }));
-    loadStock("UBL").then(() => { $("#stock-context").textContent = "UBL dashboard preview — synthetic placeholder values only." }).catch(e => showError(e.message));
+    (async () => {
+      try {
+        await loadStock("UBL");
+        const models = await ubl.models();
+        $("#model").innerHTML = models.map(m => `<option>${m}</option>`).join("");
+        $("#model").value = "All-4 fused";
+        await loadPredictions($("#model").value);
+        const [daily, arts] = await Promise.all([ubl.newsDaily(), ubl.newsArticles(null, 15)]);
+        renderNews(daily, arts);
+        await loadMarket();
+        $("#stock-context").textContent = "UBL: walk-forward backtest results (historical, not live forecasts).";
+      } catch (e) { showError(e.message); }
+    })();
   </script>
 </body>
 
