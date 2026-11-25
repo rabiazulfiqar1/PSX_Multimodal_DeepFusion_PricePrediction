@@ -226,6 +226,10 @@
       fill: var(--mut)
     }
 
+    svg text.axis-label {
+      font-size: 9px
+    }
+
     .grid {
       stroke: var(--line);
       stroke-width: 1
@@ -375,6 +379,109 @@
       opacity: .6
     }
 
+    .leg button {
+      padding: 2px 6px;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer
+    }
+
+    .leg button[aria-pressed="false"] {
+      opacity: .45;
+      text-decoration: line-through
+    }
+
+    .chart-zoom {
+      touch-action: none;
+      cursor: grab
+    }
+
+    .chart-zoom.dragging {
+      cursor: grabbing
+    }
+
+    .chart-wrap {
+      position: relative
+    }
+
+    .chart-tooltip {
+      position: absolute;
+      z-index: 2;
+      max-width: 240px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 4px 14px #0006;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-line;
+      pointer-events: none
+    }
+
+    .chart-hover-guide {
+      stroke: var(--mut);
+      stroke-dasharray: 3 3;
+      pointer-events: none
+    }
+
+    .ctrl>button {
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer
+    }
+
+    .ctrl>button:disabled {
+      opacity: .5;
+      cursor: default
+    }
+
+    .explorer-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 12px 0 16px
+    }
+
+    .explorer-table-wrap {
+      max-height: 560px;
+      overflow: auto
+    }
+
+    .explorer-table {
+      min-width: max-content;
+      font-size: 13px
+    }
+
+    .explorer-table th,
+    .explorer-table td {
+      max-width: 280px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left
+    }
+
+    .empty-state {
+      padding: 14px;
+      border: 1px dashed var(--line);
+      border-radius: 6px;
+      color: var(--mut)
+    }
+
+    .wf-label {
+      fill: var(--ink);
+      font-size: 10px
+    }
+
     @media (max-width:760px) {
       body {
         grid-template-columns: 1fr
@@ -398,27 +505,26 @@
     <p class="sub">Research & experimentation dashboard</p>
     <h2>Stocks</h2>
     <button class="stk on" data-stock="UBL">UBL<small>United Bank Limited</small></button>
-    <button class="stk" disabled aria-disabled="true">HBL<small>awaiting HBL data and model</small></button>
-    <button class="stk" disabled>BWCL<small>coming soon</small></button>
-    <button class="stk" disabled>COLG<small>coming soon</small></button>
-    <button class="stk" disabled>DGKC<small>coming soon</small></button>
-    <button class="stk" disabled>EFERT<small>coming soon</small></button>
-    <button class="stk" disabled>FATIMA<small>coming soon</small></button>
-    <button class="stk" disabled>FCCL<small>coming soon</small></button>
-    <button class="stk" disabled>FFC<small>coming soon</small></button>
-    <button class="stk" disabled>ISIL<small>coming soon</small></button>
-    <button class="stk" disabled>LUCK<small>coming soon</small></button>
-    <button class="stk" disabled>MARI<small>coming soon</small></button>
-    <button class="stk" disabled>MCB<small>coming soon</small></button>
-    <button class="stk" disabled>MEBL<small>coming soon</small></button>
-    <button class="stk" disabled>MLCF<small>coming soon</small></button>
-    <button class="stk" disabled>NATF<small>coming soon</small></button>
-    <button class="stk" disabled>NBP<small>coming soon</small></button>
-    <button class="stk" disabled>NESTLE<small>coming soon</small></button>
-    <button class="stk" disabled>OGDC<small>coming soon</small></button>
-    <button class="stk" disabled>POL<small>coming soon</small></button>
-    <button class="stk" disabled>PPL<small>coming soon</small></button>
-    <button class="stk" disabled>UPFL<small>coming soon</small></button>
+    <button class="stk" data-stock="MARI">MARI<small>Oil &amp; Gas · source and experiment data available</small></button>
+    <button class="stk" disabled aria-disabled="true">BWCL<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">COLG<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">DGKC<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">EFERT<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">FATIMA<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">FCCL<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">FFC<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">ISIL<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">LUCK<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">MCB<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">MEBL<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">MLCF<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">NATF<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">NBP<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">NESTLE<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">OGDC<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">POL<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">PPL<small>Coming Soon</small></button>
+    <button class="stk" disabled aria-disabled="true">UPFL<small>Coming Soon</small></button>
     <p class="note"><i class="dot" style="background:var(--teal)"></i>Model<br><i class="dot"
         style="background:var(--slate)"></i>Repeat yesterday<br><i class="dot"
         style="background:var(--amber)"></i>Comparison</p>
@@ -429,9 +535,11 @@
       <button role="tab" data-t="p" aria-selected="true">Predictions</button>
       <button role="tab" data-t="h" aria-selected="false">Looking further ahead</button>
       <button role="tab" data-t="w" aria-selected="false">How we test</button>
-      <button role="tab" data-t="c" aria-selected="false">Model comparison</button>
+      <button role="tab" data-t="c" aria-selected="false">Experiments &amp; ablation</button>
+      <button role="tab" data-t="d" aria-selected="false">Dataset Explorer</button>
       <button role="tab" data-t="m" aria-selected="false">Market data</button>
       <button role="tab" data-t="n" aria-selected="false">News</button>
+      <button role="tab" data-t="f" aria-selected="false">Findings</button>
     </nav>
 
     <p class="ctx" role="status"><b id="stock-context">Loading backtest results…</b> Walk-forward results from the notebook models. These are historical tests, not live predictions.</p>
@@ -443,21 +551,25 @@
         <label>To<input type="date" id="to" min="2025-01-01" max="2026-12-31" value="2026-06-30"></label>
         <label>Model<select id="model"></select></label>
       </div>
-      <p class="note">The selected range filters the chart and test-day count. The MAPE cards always show the full notebook test period. The comparison and walk-forward sections show the full test period.</p>
+      <p class="note">The selected range filters the chart and test-day count. The MAPE cards show the full available evaluation period. The comparison and walk-forward sections show the full test period.</p>
       <div class="stats">
-        <div class="stat"><b id="sM">–</b><span>MAPE, model (notebook, full test period)</span></div>
-        <div class="stat"><b id="sN">–</b><span>MAPE, repeat yesterday (notebook, full test period)</span></div>
+        <div class="stat"><b id="sM">–</b><span>MAPE, model (full test period)</span></div>
+        <div class="stat"><b id="sN">–</b><span>MAPE, repeat yesterday (full test period)</span></div>
         <div class="stat"><b id="sD">–</b><span>Test days shown</span></div>
         <div class="stat"><b>1 trading day</b><span>Example horizon: next-day close</span></div>
       </div>
       <div class="panel">
         <div id="c1"></div>
       </div>
+      <div class="panel" id="prediction-history-panel" hidden>
+        <h3 style="font-size:18px">MARI historical price · MARI.csv</h3>
+        <div id="prediction-history"></div>
+      </div>
     </section>
 
     <section id="h">
-      <h3>How far ahead can we look?</h3>
-      <p class="lede">Historical error at 5 and 10 trading days (about one and two trading weeks) appears here once computed. Show it separately from any future estimate.</p>
+      <h3>Forecast horizon evaluation</h3>
+      <p class="lede">This page reports historical out-of-sample results only. Available prediction files determine which horizons can be shown; missing horizons are labeled rather than inferred.</p>
       <div class="panel">
         <div id="c2"></div>
       </div>
@@ -466,16 +578,16 @@
 
     <section id="w">
       <h3>How we test the model fairly</h3>
-      <p class="lede">Walk-forward testing mimics real use: each test period follows its training data. Grey represents
-        training rows and teal represents test rows. These are the rolling-window folds from the notebook.</p>
+      <p class="lede" id="walk-forward-lede">Each fold trains on a fixed-size history window, uses the newest 15% for early-stopping validation, then tests on the next 21 trading samples. The window rolls forward by 21 samples and is refit for the next fold.</p>
       <div class="panel">
         <div id="wf"></div>
       </div>
+      <div class="panel" id="wf-explainer"></div>
     </section>
 
     <section id="c">
-      <h3>Which inputs help?</h3>
-      <p class="lede">Each row is one input combination. Fixed-split values average three seeds on the held-out test period. Walk-forward values retrain every 21 trading days. Lower error is better.</p>
+      <h3>Experiments and ablation</h3>
+      <p class="lede">Compare price-only, technical, fundamental, news, and combined feature inputs using the checked-in held-out and walk-forward experiment artifacts. Lower error is better.</p>
       <div class="stats" id="sum"></div>
       <p class="lede"><b>How to read this:</b> an ablation compares performance when input groups are added or removed.
         It does not by itself measure the causal importance of each individual feature.</p>
@@ -490,28 +602,71 @@
         do not measure how much each group contributes inside the full model.</p>
       <div class="panel">
         <div class="fi">
-          <div class="ft"><b>Price</b><i></i><span>Not yet calculated</span><span>Returns, volume, moving-average ratios
-              and volatility (7 daily features over 30 days)</span></div>
-          <div class="ft"><b>Technical indicators</b><i></i><span>Not yet calculated</span><span>EMA, MACD, SAR,
-              Bollinger Bands and Stochastic, plus price and volume (14 inputs)</span></div>
-          <div class="ft"><b>Financial statements</b><i></i><span>Not yet calculated</span><span>Revenue, net income,
-              EPS, total assets, cash and growth rates (9 inputs)</span></div>
-          <div class="ft"><b>News</b><i></i><span>Not yet calculated</span><span>6 news features plus 8 text-embedding
-              components</span></div>
+          <div class="ft"><b>Price</b><i></i><span>Not yet calculated</span><span>Included only where the saved
+              experiment configuration names this input block.</span></div>
+          <div class="ft"><b>Technical indicators</b><i></i><span>Not yet calculated</span><span>Included only where
+              the saved experiment configuration names this input block.</span></div>
+          <div class="ft"><b>Financial statements</b><i></i><span>Not yet calculated</span><span>Included only where
+              the saved experiment configuration names this input block.</span></div>
+          <div class="ft"><b>News</b><i></i><span>Not yet calculated</span><span>MARI scored articles are available;
+              the embedding file is absent and feature importance is not computed.</span></div>
         </div>
       </div>
       <h3 style="font-size:18px;margin-top:20px">Detailed comparison</h3>
       <div class="panel">
         <table id="tb"></table>
-        <p class="note">Fixed-split values average three seeds on the held-out test period. Walk-forward values retrain every 21 trading days.</p>
+        <p class="note">Fixed-split metrics average the available seed runs on the held-out test period. Walk-forward metrics use the checked-in rolling predictions.</p>
       </div>
+    </section>
+    <section id="d">
+      <h3>Dataset Explorer</h3>
+      <p class="lede">Inspect the project’s local source datasets and experiment artifacts. Filters apply to the real rows; CSV export downloads the full filtered result, not just the visible page.</p>
+      <div class="ctrl">
+        <label>Dataset<select id="dataset-select"></select></label>
+        <label>Search<input type="search" id="dataset-search" placeholder="Search values"></label>
+        <label>Search column<select id="dataset-search-column"></select></label>
+        <label>Date column<select id="dataset-date-column"></select></label>
+        <label>From<input type="date" id="dataset-from"></label>
+        <label>To<input type="date" id="dataset-to"></label>
+        <label>Numeric column<select id="dataset-number-column"></select></label>
+        <label>Minimum<input type="number" id="dataset-min" step="any"></label>
+        <label>Maximum<input type="number" id="dataset-max" step="any"></label>
+        <label>Sort by<select id="dataset-sort-column"></select></label>
+        <label>Order<select id="dataset-sort-order"><option value="asc">Ascending</option><option value="desc">Descending</option></select></label>
+      </div>
+      <div class="ctrl">
+        <button id="dataset-apply" type="button">Apply filters</button>
+        <button id="dataset-download" type="button">Download filtered CSV</button>
+        <span class="note" id="dataset-status" role="status"></span>
+      </div>
+      <div class="explorer-meta stats" id="dataset-stats"></div>
+      <p class="note" id="dataset-coverage"></p>
+      <p class="note" id="dataset-missing-detail"></p>
+      <div class="panel">
+        <div class="explorer-table-wrap" id="dataset-table"></div>
+        <div class="ctrl" style="justify-content:space-between;margin:12px 0 0">
+          <button id="dataset-prev" type="button">Previous</button>
+          <span id="dataset-page-label" class="note"></span>
+          <button id="dataset-next" type="button">Next</button>
+        </div>
+      </div>
+    </section>
+    <section id="f">
+      <h3>Findings</h3>
+      <p class="lede">Project-wide summary of available UBL and MARI data and experiment results. Results are grouped by their actual evaluation method; missing outputs and unsupported horizons are identified explicitly.</p>
+      <div class="stats" id="finding-summary"></div>
+      <div class="panel" id="finding-coverage"></div>
+      <div class="panel" id="finding-horizons"></div>
+      <div class="panel" id="finding-consistency"></div>
+      <div class="panel" id="finding-observations"></div>
+      <div class="panel" id="finding-limitations"></div>
     </section>
     <section id="m">
       <h3>Market data</h3>
-      <p class="lede">Daily closing price with the 12- and 26-day exponential moving averages, from the Kaggle price file.
-        Fundamentals are the quarterly filings, imputed where values were missing.</p>
+      <p class="lede">Browse actual source-market prices and the available company fundamentals for the selected stock.</p>
       <div class="ctrl"><label>From<input type="date" id="mfrom"></label>
         <label>To<input type="date" id="mto"></label></div>
+      <p class="note" id="market-note"></p>
       <div class="panel"><div id="pc"></div></div>
       <h3 style="font-size:18px;margin-top:20px">Quarterly fundamentals</h3>
       <div class="panel" id="fund"></div>
@@ -519,7 +674,7 @@
 
     <section id="n">
       <h3>News sentiment</h3>
-      <p class="lede">Daily mean FinBERT sentiment for UBL news: positive minus negative probability, from -1 to +1.
+      <p class="lede" id="news-lede">Daily mean FinBERT sentiment for UBL news: positive minus negative probability, from -1 to +1.
         Only days with at least one article are charted.</p>
       <div class="stats" id="nstats"></div>
       <div class="panel"><div id="nc"></div></div>
@@ -533,9 +688,11 @@
     /* ---------- API DATA LAYER ----------
        Reads real UBL backtest outputs from ubl_api.py (/api/dashboard/UBL).
     */
-    const API_BASE = "http://127.0.0.1:8000";
+    const API_BASE = (window.UBL_API_BASE || "http://127.0.0.1:8000").replace(/\/api\/?$/, "").replace(/\/$/, "");
     let selectedStock = "UBL";
     let API_DATA = null;
+    let PROJECT_FINDINGS = null;
+    let DATASET_PAGE = 1;
 
     async function apiGet(path) {
       const response = await fetch(`${API_BASE}${path}`);
@@ -544,11 +701,60 @@
     }
     async function loadStock(stock = selectedStock) {
       selectedStock = stock;
+      API_DATA = null;
+      PRED = [];
+      NB = null;
+      PRICE = [];
+      $("#model").disabled = true;
+      $("#sM").textContent = "–";
+      $("#sN").textContent = "–";
+      $("#sD").textContent = "0";
+      $("#news-lede").textContent = stock === "UBL"
+        ? "Daily mean FinBERT sentiment for UBL news: positive minus negative probability, from -1 to +1. Only days with at least one article are charted."
+        : "Daily mean sentiment from MARI scored articles, grouped by feature date. Article scores are historical model outputs, not investment advice.";
+      $("#stock-context").textContent = `Loading ${stock} project data…`;
+      ["#c1", "#c2", "#wf", "#wf-explainer", "#tb", "#sum", "#dv",
+        "#ab", "#fc", "#pc",
+        "#fund", "#nc", "#heads", "#nstats", "#prediction-history"].forEach(selector => { $(selector).innerHTML = ""; });
+      $("#prediction-history-panel").hidden = stock !== "MARI";
+      $("#market-note").textContent = "";
       API_DATA = await apiGet(`/api/dashboard/${stock}`);
-      const rows = API_DATA.predictions || [];
-      if (rows.length) {
-        const firstDate = rows[0].date;
-        const lastDate = rows[rows.length - 1].date;
+      const models = await ubl.models(stock);
+      const currentModel = $("#model").value;
+      $("#model").innerHTML = models.map(model => `<option value="${esc(model)}">${esc(model)}</option>`).join("");
+      const preferred = models.includes(API_DATA.selected_model)
+        ? API_DATA.selected_model
+        : models.includes(currentModel) ? currentModel
+          : models.includes("All-4 fused") ? "All-4 fused" : models[0];
+      if (preferred) {
+        $("#model").value = preferred;
+        $("#model").disabled = false;
+        await loadPredictions(preferred);
+      }
+      const [daily, arts] = await Promise.all([
+        ubl.newsDaily(null, null, stock),
+        ubl.newsArticles(null, 15, stock),
+      ]);
+      renderNews(daily, arts);
+      $("#stock-context").textContent = stock === "UBL"
+        ? "UBL: real walk-forward backtest results (historical, not live forecasts)."
+        : "MARI: source prices, scored news, ablation results, and walk-forward test predictions are available; no future forecast is generated.";
+      await loadMarket(stock);
+      renderAll();
+    }
+    let PRED = [];     // predictions for the selected model
+    let PRICE = [];    // close and EMAs per trading day
+    let NB = null;     // notebook metrics for the selected model
+    function getPredictions(from, to) {
+      return PRED.filter(x => x.date >= from && x.date <= to);
+    }
+    async function loadPredictions(model) {
+      const rows = await ubl.predictions(model, null, null, selectedStock);
+      PRED = rows.map(r => ({ date: r.DATE, actual: r.actual, model: r.pred, naive: r.prev_close }));
+      NB = await ubl.summary(model, selectedStock);
+      const firstDate = PRED[0]?.date;
+      const lastDate = PRED[PRED.length - 1]?.date;
+      if (firstDate && lastDate) {
         ["#from", "#to"].forEach(selector => {
           $(selector).min = firstDate;
           $(selector).max = lastDate;
@@ -556,25 +762,18 @@
         if ($("#from").value < firstDate || $("#from").value > lastDate) $("#from").value = firstDate;
         if ($("#to").value < firstDate || $("#to").value > lastDate) $("#to").value = lastDate;
       }
-      renderAll();
-    }
-    let PRED = [];     // predictions for the selected model
-    let PRICE = [];    // close and EMAs per trading day
-    let NB = null;     // notebook metrics for the selected model
-    function getPredictions(stock, from, to) {
-      return PRED.filter(x => x.date >= from && x.date <= to);
-    }
-    async function loadPredictions(model) {
-      const rows = await ubl.predictions(model);
-      PRED = rows.map(r => ({ date: r.DATE, actual: r.actual, model: r.pred, naive: r.prev_close }));
-      NB = await ubl.summary(model);
-      renderP();
     }
     const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-    async function loadMarket() {
-      const [price, tech, fund] = await Promise.all([ubl.price(), ubl.technical(), ubl.fundamentals()]);
+    async function loadMarket(stock = selectedStock) {
+      const [price, tech, fund] = await Promise.all([ubl.price(null, null, stock), ubl.technical(null, null, stock), ubl.fundamentals(stock)]);
       const T = Object.fromEntries(tech.map(t => [t.DATE, t]));
       PRICE = price.map(p => ({ ...p, EMA_12: T[p.DATE]?.EMA_12 ?? null, EMA_26: T[p.DATE]?.EMA_26 ?? null }));
+      renderPredictionHistory();
+      if (!PRICE.length) {
+        $("#pc").innerHTML = '<p class="empty-state">No market rows are available for this stock.</p>';
+        $("#fund").innerHTML = '<p class="empty-state">No fundamentals are available for this stock.</p>';
+        return;
+      }
       const first = PRICE[0].DATE, last = PRICE[PRICE.length - 1].DATE;
       ["#mfrom", "#mto"].forEach(s => { $(s).min = first; $(s).max = last; });
       $("#mfrom").value = first;
@@ -582,22 +781,40 @@
       renderMarket();
       renderFund(fund);
     }
+    function renderPredictionHistory() {
+      if (selectedStock !== "MARI" || $("#prediction-history-panel").hidden) return;
+      if (PRICE.length < 2) {
+        $("#prediction-history").innerHTML = '<p class="empty-state">MARI historical prices are not available.</p>';
+        return;
+      }
+      line(
+        $("#prediction-history"),
+        PRICE.map(row => row.DATE),
+        [{ n: "MARI close from MARI.csv (PKR)", v: PRICE.map(row => row.CLOSE), c: COL.a, w: 2 }],
+        value => `Rs ${value.toFixed(2)}`,
+      );
+    }
     function renderMarket() {
       if (!PRICE.length) return;
       const f = $("#mfrom").value, t = $("#mto").value;
-      const d = PRICE.filter(x => x.DATE >= f && x.DATE <= t && x.EMA_26 != null);
+      const d = PRICE.filter(x => x.DATE >= f && x.DATE <= t && (selectedStock !== "UBL" || x.EMA_26 != null));
       if (d.length < 2) { $("#pc").innerHTML = "<p>Choose a wider date range.</p>"; return; }
-      line($("#pc"), d.map(x => x.DATE.slice(2)), [
-        { n: "Close (PKR)", v: d.map(x => x.CLOSE), c: COL.a, w: 2 },
-        { n: "EMA 12", v: d.map(x => x.EMA_12), c: COL.m, w: 1.5 },
-        { n: "EMA 26", v: d.map(x => x.EMA_26), c: COL.c, w: 1.5 },
-      ], v => v.toFixed(0));
+      const series = [{ n: "Close (PKR)", v: d.map(x => x.CLOSE), c: COL.a, w: 2 }];
+      if (selectedStock === "UBL") {
+        series.push({ n: "EMA 12", v: d.map(x => x.EMA_12), c: COL.m, w: 1.5 });
+        series.push({ n: "EMA 26", v: d.map(x => x.EMA_26), c: COL.c, w: 1.5 });
+        $("#market-note").textContent = "UBL prices and EMA indicators from the checked-in project datasets.";
+      } else {
+        $("#market-note").textContent = "Actual MARI source prices and fundamentals are shown. No MARI technical-indicator artifact is available; UBL values are not used.";
+      }
+      line($("#pc"), d.map(x => x.DATE), series, v => v.toFixed(0));
     }
     function renderFund(rows) {
-      const f = v => v == null ? "–" : Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
-      $("#fund").innerHTML = `<table><tr><th>Quarter</th><th>Filing date</th><th>Revenue</th><th>Net income</th><th>EPS (basic)</th><th>Revenue growth (YoY, %)</th></tr>` +
-        rows.map(r => `<tr><td>${esc(r.QUARTER ?? "–")}</td><td>${esc(r.DATE ?? "–")}</td><td>${f(r.Revenue)}</td><td>${f(r["Net Income"])}</td><td>${f(r["EPS (Basic)"])}</td><td>${f(r["Revenue Growth (YoY)"])}</td></tr>`).join("") +
-        `</table>`;
+      if (!rows.length) { $("#fund").innerHTML = '<p class="empty-state">No fundamentals are available.</p>'; return; }
+      const columns = Object.keys(rows[0]);
+      $("#fund").innerHTML = `<div class="explorer-table-wrap"><table><thead><tr>${columns.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>` +
+        rows.map(r => `<tr>${columns.map(c => `<td>${esc(r[c] ?? "–")}</td>`).join("")}</tr>`).join("") +
+        `</tbody></table></div>`;
     }
     function renderNews(daily, arts) {
       const days = daily.filter(x => x.has_news === 1);
@@ -618,16 +835,108 @@
     /* ---------- charts ---------- */
     const COL = { a: "var(--ink)", m: "var(--teal)", n: "var(--slate)", c: "var(--amber)" };
     function line(el, labels, series, fmt) {
-      const W = 700, H = 300, m = { l: 46, r: 12, t: 10, b: 26 }, all = series.flatMap(s => s.v), lo = Math.min(...all), hi = Math.max(...all), pd = (hi - lo) * .06 || 1, y0 = lo - pd, y1 = hi + pd,
-      X = i => m.l + i * (W - m.l - m.r) / (labels.length - 1 || 1), Y = v => m.t + (1 - (v - y0) / (y1 - y0)) * (H - m.t - m.b); let g = "";
-      for (let k = 0; k <= 4; k++) { const v = y0 + (y1 - y0) * k / 4; g += `<line class="grid" x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${m.l - 6}" y="${Y(v) + 4}" text-anchor="end">${fmt(v)}</text>` }
-      const st = Math.max(1, Math.floor(labels.length / 5)); labels.forEach((l, i) => { if (i % st === 0 || labels.length < 8) g += `<text x="${X(i)}" y="${H - 6}" text-anchor="middle">${l}</text>` });
-      series.forEach(s => { g += `<polyline fill="none" style="stroke:${s.c}" stroke-width="${s.w || 2}" ${s.d ? 'stroke-dasharray="5 4"' : ""} points="${s.v.map((v, i) => X(i) + "," + Y(v)).join(" ")}"/>${labels.length < 8 ? s.v.map((v, i) => `<circle cx="${X(i)}" cy="${Y(v)}" r="4" style="fill:${s.c}"/>`).join("") : ""}` });
-      el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><div class="leg">${series.map(s => `<span><i style="background:${s.c}"></i>${s.n}</span>`).join("")}</div>`
+      const W = 700, H = 300, m = { l: 46, r: 12, t: 10, b: 26 };
+      const all = series.flatMap(s => s.v).map(Number).filter(Number.isFinite);
+      if (!all.length || !labels.length) { el.innerHTML = '<p class="empty-state">No chartable values are available.</p>'; return; }
+      const lo = Math.min(...all), hi = Math.max(...all), pd = (hi - lo) * .06 || 1, y0 = lo - pd, y1 = hi + pd;
+      const X = i => m.l + i * (W - m.l - m.r) / (labels.length - 1 || 1);
+      const Y = v => m.t + (1 - (v - y0) / (y1 - y0)) * (H - m.t - m.b);
+      let g = `<rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent" pointer-events="all"/>`;
+      for (let k = 0; k <= 4; k++) { const v = y0 + (y1 - y0) * k / 4; g += `<line class="grid" x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="axis-label" x="${m.l - 6}" y="${Y(v) + 4}" text-anchor="end">${fmt(v)}</text>` }
+      const st = Math.max(1, Math.floor(labels.length / 5));
+      labels.forEach((l, i) => {
+        if (i % st === 0 || labels.length < 8) g += `<text class="axis-label" x="${X(i)}" y="${H - 6}" text-anchor="middle">${esc(String(l).slice(2))}</text>`;
+      });
+      series.forEach((s, j) => {
+        const points = s.v.map((v, i) => Number.isFinite(Number(v)) ? `${X(i)},${Y(Number(v))}` : "").filter(Boolean).join(" ");
+        g += `<g data-series="${j}"><polyline fill="none" style="stroke:${s.c}" stroke-width="${s.w || 2}" ${s.d ? 'stroke-dasharray="5 4"' : ""} points="${points}"/></g>`;
+      });
+      el.innerHTML = `<div class="chart-wrap"><svg class="chart-zoom" viewBox="0 0 ${W} ${H}" role="img" aria-label="Interactive line chart">${g}<line class="chart-hover-guide" y1="${m.t}" y2="${H - m.b}" display="none"/></svg><div class="chart-tooltip" role="status" aria-live="polite" hidden></div></div><div class="leg">${series.map((s, i) => `<button type="button" class="leg-toggle" data-series="${i}" aria-pressed="true"><i style="background:${s.c}"></i>${esc(s.n)}</button>`).join("")}</div><p class="note">Move over the chart to inspect the nearest date · scroll to zoom · drag to pan</p>`;
+      const svg = el.querySelector("svg");
+      const tooltip = el.querySelector(".chart-tooltip");
+      const guide = svg.querySelector(".chart-hover-guide");
+      const bounds = { x: 0, y: 0, w: W, h: H };
+      const updateView = () => svg.setAttribute("viewBox", `${bounds.x} 0 ${bounds.w} ${H}`);
+      const hideTooltip = () => {
+        tooltip.hidden = true;
+        guide.setAttribute("display", "none");
+      };
+      const showTooltip = event => {
+        const rect = svg.getBoundingClientRect();
+        if (!rect.width || !rect.height) return hideTooltip();
+        const x = bounds.x + (event.clientX - rect.left) / rect.width * bounds.w;
+        const y = (event.clientY - rect.top) / rect.height * H;
+        if (x < m.l || x > W - m.r || y < m.t || y > H - m.b) return hideTooltip();
+        const index = Math.max(0, Math.min(labels.length - 1,
+          Math.round((x - m.l) / (W - m.l - m.r) * (labels.length - 1))));
+        const values = series.map((item, i) => {
+          const group = svg.querySelector(`[data-series="${i}"]`);
+          const value = Number(item.v[index]);
+          return group?.style.display === "none" || !Number.isFinite(value)
+            ? null
+            : `${item.n}: ${fmt(value)}`;
+        }).filter(Boolean);
+        if (!values.length) return hideTooltip();
+        tooltip.textContent = [labels[index], ...values].join("\n");
+        tooltip.hidden = false;
+        guide.setAttribute("x1", String(X(index)));
+        guide.setAttribute("x2", String(X(index)));
+        guide.removeAttribute("display");
+        const wrap = svg.parentElement.getBoundingClientRect();
+        const left = Math.max(4, Math.min(event.clientX - wrap.left + 12, wrap.width - tooltip.offsetWidth - 4));
+        const top = Math.max(4, Math.min(event.clientY - wrap.top + 12, wrap.height - tooltip.offsetHeight - 4));
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${top}px`;
+      };
+      svg.addEventListener("wheel", event => {
+        event.preventDefault();
+        hideTooltip();
+        const rect = svg.getBoundingClientRect();
+        const cursor = bounds.x + (event.clientX - rect.left) / rect.width * bounds.w;
+        const width = Math.max(240, Math.min(W, bounds.w * (event.deltaY < 0 ? 0.8 : 1.25)));
+        bounds.x = Math.max(0, Math.min(W - width, cursor - (cursor - bounds.x) * width / bounds.w));
+        bounds.w = width;
+        updateView();
+      }, { passive: false });
+      let dragX = null;
+      svg.addEventListener("pointerdown", event => {
+        if (event.button !== 0) return;
+        hideTooltip();
+        dragX = event.clientX;
+        svg.classList.add("dragging");
+        svg.setPointerCapture(event.pointerId);
+      });
+      svg.addEventListener("pointermove", event => {
+        if (dragX !== null) {
+          const rect = svg.getBoundingClientRect();
+          bounds.x = Math.max(0, Math.min(W - bounds.w, bounds.x - (event.clientX - dragX) * bounds.w / rect.width));
+          dragX = event.clientX;
+          updateView();
+          return;
+        }
+        showTooltip(event);
+      });
+      const stopDrag = () => { dragX = null; svg.classList.remove("dragging"); };
+      svg.addEventListener("pointerup", stopDrag);
+      svg.addEventListener("pointercancel", stopDrag);
+      svg.addEventListener("pointerleave", hideTooltip);
+      el.querySelectorAll(".leg-toggle").forEach(button => button.addEventListener("click", () => {
+        hideTooltip();
+        const visible = button.getAttribute("aria-pressed") !== "true";
+        button.setAttribute("aria-pressed", String(visible));
+        const group = svg.querySelector(`[data-series="${button.dataset.series}"]`);
+        if (group) group.style.display = visible ? "" : "none";
+      }));
     }
     function renderP() {
-      if (!PRED.length) return;
-      const f = $("#from").value, t = $("#to").value, d = getPredictions(selectedStock, f, t);
+      if (!PRED.length) {
+        $("#c1").innerHTML = `<p class="empty-state">Results Not Available: no ${esc(selectedStock)} walk-forward prediction rows are present.</p>`;
+        $("#sM").textContent = "–";
+        $("#sN").textContent = "–";
+        $("#sD").textContent = "0";
+        return;
+      }
+      const f = $("#from").value, t = $("#to").value, d = getPredictions(f, t);
       if (f > t) { $("#c1").innerHTML = "<p>Choose a start date on or before the end date.</p>"; return }
       if (d.length < 2) { $("#c1").innerHTML = "<p>Choose at least two trading days in the available evaluation period.</p>"; return }
       const A = d.map(x => x.actual);
@@ -638,36 +947,103 @@
     }
     function renderH() {
       if (!API_DATA) return;
-      const horizons = (API_DATA.multi_horizon || []).filter(x => [1, 5, 10].includes(x.days));
-      if (!horizons.length) { $("#c2").innerHTML = '<p class="note">Multi-day horizons not computed yet.</p>'; $("#fc").innerHTML = ""; return; }
-      line($("#c2"), horizons.map(x => x.label), [
-        { n: "Repeat yesterday", v: horizons.map(x => x.naive_mape), c: COL.n, d: 1 },
-        { n: "Model", v: horizons.map(x => x.model_mape), c: COL.m },
-      ], v => v.toFixed(2) + "%");
-      $("#fc").innerHTML = "<p class=\"note\">No future forecast is computed. Historical error is not a future price estimate.</p>";
+      const rows = getPredictions($("#from").value, $("#to").value);
+      const metricsFor = key => {
+        if (!rows.length) return null;
+        const errors = rows.map(r => r.actual - r[key]);
+        return {
+          MAE: errors.reduce((sum, e) => sum + Math.abs(e), 0) / errors.length,
+          RMSE: Math.sqrt(errors.reduce((sum, e) => sum + e * e, 0) / errors.length),
+          MAPE: rows.reduce((sum, r) => sum + Math.abs((r.actual - r[key]) / r.actual), 0) / rows.length * 100,
+        };
+      };
+      const metrics = metricsFor("model");
+      const naive = metricsFor("naive");
+      if (PRED.length) {
+        line($("#c2"), rows.map(x => x.date), [
+          { n: "Actual next-day close", v: rows.map(x => x.actual), c: COL.a, w: 2 },
+          { n: "Predicted next-day close", v: rows.map(x => x.model), c: COL.m },
+        ], v => `Rs ${v.toFixed(2)}`);
+      } else {
+        $("#c2").innerHTML = `<p class="empty-state">Next-step actual-vs-predicted values are not available for ${esc(selectedStock)}.</p>`;
+      }
+      const longerHorizonStatus = selectedStock === "UBL"
+        ? "No fused-model prediction series; separate UBL experiment metrics are on Findings"
+        : "Results Not Available: no MARI prediction series for this horizon";
+      $("#fc").innerHTML = `<div class="panel"><table><thead><tr><th>Horizon</th><th>Status</th><th>MAE (PKR)</th><th>RMSE (PKR)</th><th>MAPE</th></tr></thead><tbody>` +
+        `<tr><td>1 trading day</td><td>${PRED.length ? "Historical next-step walk-forward results" : "Results Not Available"}</td><td>${metrics ? metrics.MAE.toFixed(2) : "–"}</td><td>${metrics ? metrics.RMSE.toFixed(2) : "–"}</td><td>${metrics ? metrics.MAPE.toFixed(2) + "%" : "–"}</td></tr>` +
+        `<tr><td>5 trading days</td><td>${longerHorizonStatus}</td><td>–</td><td>–</td><td>–</td></tr>` +
+        `<tr><td>10 trading days</td><td>${longerHorizonStatus}</td><td>–</td><td>–</td><td>–</td></tr>` +
+        `<tr><td>21 trading days</td><td>${longerHorizonStatus}</td><td>–</td><td>–</td><td>–</td></tr>` +
+        `</tbody></table><p class="note">${selectedStock === "MARI" ? "The MARI walk-forward CSV contains fold, date, previous close, actual, and predicted values, supporting the next-step series only. It has no explicit multi-day horizon outputs or horizon column." : "UBL's saved main-branch series contains next-day walk-forward pairs; separate modality-only multi-horizon metrics remain summarized on Findings."} ${naive ? `For reference, the selected-range repeat-yesterday MAPE is ${naive.MAPE.toFixed(2)}%.` : ""} No future price estimate is computed.</p></div>`;
     }
     function renderW() {
       if (!API_DATA) return;
-      const wf = API_DATA.walk_forward, N = wf.total_days, W = 700, H = Math.max(160, wf.iterations.length * 30 + 45), sx = v => 10 + v / N * 680;
+      const wf = API_DATA.walk_forward;
+      $("#walk-forward-lede").textContent = selectedStock === "UBL"
+        ? "Each fold trains on a fixed-size history window, uses the newest 15% for early-stopping validation, then tests on the next 21 trading samples. The window rolls forward by 21 samples and is refit for the next fold."
+        : "MARI's saved walk-forward outputs describe test folds and predictions. Training and validation window details are not present in the supplied files.";
+      if (!wf.iterations.length) {
+        $("#wf").innerHTML = `<p class="empty-state">Walk-forward test-fold results are not available for ${esc(selectedStock)}.</p>`;
+        $("#wf-explainer").innerHTML = `<p class="note">No ${esc(selectedStock)} training, validation, or test-fold outputs are available.</p>`;
+        return;
+      }
+      const N = wf.total_days, W = 900, left = 78, plotWidth = 800;
+      const H = Math.max(180, wf.iterations.length * 34 + 60), sx = v => left + v / N * plotWidth;
       let g = "";
+      const hasWindowMetadata = wf.iterations.some(it => it.train_start != null && it.train_end != null);
       wf.iterations.forEach((it, k) => {
-        const y = 10 + k * 30;
-        g += `<rect x="${sx(it.train_start)}" y="${y}" width="${Math.max(2, sx(it.train_end) - sx(it.train_start))}" height="16" rx="2" style="fill:var(--slate)" opacity=".65"/>`;
-        g += `<rect x="${sx(it.test_start)}" y="${y}" width="${Math.max(3, sx(it.test_end) - sx(it.test_start))}" height="16" rx="2" style="fill:var(--teal)"/>`;
-        g += `<text x="12" y="${y + 12}">Iteration ${k + 1}</text>`;
+        const y = 12 + k * 34;
+        const width = (start, end) => Math.max(2, sx(end + 1) - sx(start));
+        g += `<text x="4" y="${y + 12}" class="wf-label">Fold ${it.fold}</text>`;
+        g += `<rect x="${sx(it.test_start)}" y="${y}" width="${width(it.test_start, it.test_end)}" height="16" rx="2" style="fill:var(--teal)"><title>Held-out test: ${it.test_start_date} to ${it.test_end_date} (${it.test_days} samples)</title></rect>`;
+        if (hasWindowMetadata && it.train_start != null && it.train_end != null) {
+          g += `<rect x="${sx(it.train_start)}" y="${y}" width="${width(it.train_start, it.train_end)}" height="16" rx="2" style="fill:var(--slate)" opacity=".75"><title>Fit/training: ${it.train_start_date} to ${it.train_end_date} (${it.train_days} samples)</title></rect>`;
+          g += `<rect x="${sx(it.gap_start)}" y="${y}" width="${width(it.gap_start, it.gap_start)}" height="16" style="fill:var(--bg)"><title>One-sample gap between fitting and validation</title></rect>`;
+          g += `<rect x="${sx(it.validation_start)}" y="${y}" width="${width(it.validation_start, it.validation_end)}" height="16" style="fill:var(--amber)"><title>Validation: ${it.validation_start_date} to ${it.validation_end_date} (${it.validation_days} samples)</title></rect>`;
+        }
       });
-      $("#wf").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${g}</svg><div class="leg"><span><i style="background:var(--slate)"></i>Training window</span><span><i style="background:var(--teal)"></i>Testing window</span></div><p class="note">Rolling-window folds from the notebook. Grey = training rows, teal = test rows.</p>`;
+      const legend = hasWindowMetadata
+        ? '<span><i style="background:var(--slate)"></i>Training / fit</span><span><i style="background:var(--amber)"></i>Validation</span><span><i style="background:var(--teal)"></i>Held-out test</span>'
+        : '<span><i style="background:var(--teal)"></i>Held-out test fold</span>';
+      $("#wf").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Walk-forward test folds">${g}</svg><div class="leg">${legend}</div><p class="note">Hover a test segment for its dates and sample count. Test samples run left to right.</p>`;
+      if (!hasWindowMetadata) {
+        const perFoldRows = wf.iterations.map(it =>
+          `<tr><td>${it.fold}</td><td>${esc(it.test_start_date)} – ${esc(it.test_end_date)}</td><td>${it.test_days}</td>` +
+          `<td>${it.MAE.toFixed(2)}</td><td>${it.Naive_MAE.toFixed(2)}</td><td>${it["Dir. acc."].toFixed(1)}%</td></tr>`
+        ).join("");
+        const summary = wf.model_summary || [];
+        const summaryColumns = summary.length ? Object.keys(summary[0]) : [];
+        const summaryRows = summary.map(row =>
+          `<tr>${summaryColumns.map(column => `<td>${esc(row[column] ?? "–")}</td>`).join("")}</tr>`
+        ).join("");
+        const summaryTable = summary.length
+          ? `<h4>MARI model-level walk-forward summary · wf_rolling_table.csv</h4><div class="explorer-table-wrap"><table><thead><tr>${summaryColumns.map(column => `<th>${esc(column)}</th>`).join("")}</tr></thead><tbody>${summaryRows}</tbody></table></div>`
+          : '<p class="note">Results Not Available: MARI walk-forward model summary is missing.</p>';
+        $("#wf-explainer").innerHTML =
+          `<h3 style="font-size:18px">What the MARI fold files show</h3><ol><li><b>Testing:</b> the teal segments are the date ranges and sample counts present in MARI's walk-forward prediction file.</li><li><b>Model evaluation:</b> per-fold errors come from wf_rolling_per_fold.csv; model-level metrics come from wf_rolling_table.csv and wf_rolling_raw.csv.</li><li><b>Training and validation:</b> the supplied MARI files do not include their date ranges or sample counts, so these windows are not inferred or drawn.</li></ol><p class="note">The timeline covers the saved test samples only; it does not represent the full training history.</p>` +
+          `<h4>Selected model per-fold results</h4><div class="explorer-table-wrap"><table><thead><tr><th>Fold</th><th>Test dates</th><th>Rows</th><th>Model MAE</th><th>Repeat-yesterday MAE</th><th>Direction accuracy</th></tr></thead><tbody>${perFoldRows}</tbody></table></div>` +
+          summaryTable;
+        return;
+      }
+      const first = wf.iterations[0];
+      $("#wf-explainer").innerHTML = `<h3 style="font-size:18px">What enters each fold?</h3><ol><li><b>Training:</b> the historical window (grey) is used to fit model weights and feature/target scalers.</li><li><b>Validation:</b> the newest 15% (amber) is held out from fitting and used for early stopping. A one-sample gap separates fit and validation rows.</li><li><b>Testing:</b> the next 21 samples (teal) are held out until prediction; actual values are used only for evaluation.</li><li><b>Move forward:</b> after scoring the fold, the fixed-size history window shifts by 21 samples and is refit. It does not expand indefinitely.</li></ol><p class="note">First fold: training ${first.train_start_date}–${first.train_end_date}; validation ${first.validation_start_date}–${first.validation_end_date}; test ${first.test_start_date}–${first.test_end_date}. This is historical evaluation, not a live forecast.</p>`;
     }
     function renderSum() {
       if (!API_DATA) return;
       const rows = API_DATA.ablation;
+      if (!rows.length) {
+        $("#sum").innerHTML = `<p class="empty-state">Results Not Available: no ${esc(selectedStock)} experiment metrics are present.</p>`;
+        return;
+      }
       const best = [...rows].sort((a, b) => a.walk_forward_mape - b.walk_forward_mape)[0];
-      const full = rows.find(x => x.name === "All features") || rows[rows.length - 1];
-      $("#sum").innerHTML = `<div class="stat"><b>${best.name}</b><span>Lowest walk-forward MAPE</span></div><div class="stat"><b>${full.walk_forward_rmse.toFixed(2)}</b><span>All-features walk-forward RMSE (Rs)</span></div><div class="stat"><b>${rows.length}</b><span>Input combinations compared</span></div>`;
+      const full = rows.find(x => x.name === "All-4 fused") || rows[rows.length - 1];
+      $("#sum").innerHTML = `<div class="stat"><b>${esc(best.name)}</b><span>Lowest walk-forward MAPE among available configurations</span></div><div class="stat"><b>${full.walk_forward_rmse.toFixed(2)}</b><span>${esc(full.name)} walk-forward RMSE (PKR)</span></div><div class="stat"><b>${rows.length}</b><span>Input configurations evaluated</span></div>`;
     }
     function diverge() {
       if (!API_DATA) return;
       const rows = API_DATA.ablation, base = API_DATA.naive_rmse;
+      if (!rows.length) { $("#dv").innerHTML = `<p class="empty-state">Results Not Available for ${esc(selectedStock)}.</p>`; return; }
       const sorted = rows.map(r => [r.name, r.walk_forward_rmse - base]).sort((a, b) => a[1] - b[1]);
       const mx = Math.max(...sorted.map(r => Math.abs(r[1]))) * 1.15 || 1, W = 700, L = 230, R = 620, c = (L + R) / 2, half = (R - L) / 2, rh = 30, H = sorted.length * rh + 40, X = v => c + v / mx * half;
       let g = `<line x1="${c}" x2="${c}" y1="2" y2="${H - 26}" style="stroke:var(--mut)" stroke-width="1.5"/>`;
@@ -681,35 +1057,218 @@
     function renderC() {
       if (!API_DATA) return;
       const rows = API_DATA.ablation;
-      $("#tb").innerHTML = `<tr><th>Inputs</th><th>Fixed split MAPE</th><th>Walk-forward MAPE</th><th>Walk-forward RMSE</th><th>Directional accuracy</th></tr>` +
-        `<tr><td>Repeat yesterday</td><td>—</td><td>—</td><td>Rs ${API_DATA.naive_rmse.toFixed(2)}</td><td>—</td></tr>` +
-        rows.map(r => `<tr><td>${r.name}</td><td>${r.fixed_split_mape.toFixed(2)}%</td><td>${r.walk_forward_mape.toFixed(2)}%</td><td>Rs ${r.walk_forward_rmse.toFixed(2)}</td><td>${r.directional_accuracy.toFixed(1)}%</td></tr>`).join("");
+      if (!rows.length) {
+        $("#tb").innerHTML = `<tr><td colspan="10">Results Not Available for ${esc(selectedStock)}.</td></tr>`;
+        $("#ab").innerHTML = "";
+        return;
+      }
+      const fixedMetric = (value, deviation) => Number.isFinite(deviation)
+        ? `${value.toFixed(2)} ± ${deviation.toFixed(2)}`
+        : value.toFixed(2);
+      $("#tb").innerHTML = `<thead><tr><th>Model / feature groups</th><th>Fixed MAE (PKR)</th><th>Fixed RMSE (PKR)</th><th>Fixed MAPE</th><th>Fixed direction accuracy</th><th>Fixed R²</th><th>WF MAE (PKR)</th><th>WF RMSE (PKR)</th><th>WF MAPE</th><th>WF direction accuracy</th></tr></thead><tbody>` +
+        `<tr><td>Repeat yesterday baseline</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>${API_DATA.naive_mae.toFixed(2)}</td><td>${API_DATA.naive_rmse.toFixed(2)}</td><td>${API_DATA.naive_mape.toFixed(2)}%</td><td>–</td></tr>` +
+        rows.map(r => `<tr><td>${esc(r.name)}<br><span class="note">${esc(r.features)}</span></td><td>${fixedMetric(r.fixed_split_mae, r.fixed_split_mae_std)}</td><td>${fixedMetric(r.fixed_split_rmse, r.fixed_split_rmse_std)}</td><td>${fixedMetric(r.fixed_split_mape, r.fixed_split_mape_std)}%</td><td>${fixedMetric(r.fixed_split_directional_accuracy, r.fixed_split_directional_accuracy_std)}%</td><td>${fixedMetric(r.fixed_split_r2, r.fixed_split_r2_std)}</td><td>${r.walk_forward_mae.toFixed(2)}</td><td>${r.walk_forward_rmse.toFixed(2)}</td><td>${r.walk_forward_mape.toFixed(2)}%</td><td>${r.directional_accuracy.toFixed(1)}%</td></tr>`).join("") +
+        `</tbody>`;
       $("#ab").innerHTML = [["Repeat yesterday", API_DATA.naive_mape, "--slate"], ...rows.map(r => [r.name, r.walk_forward_mape, "--amber"])].map(([n, v, b]) => `<div class="bar"><span>${n}</span><div style="width:${Math.min(100, v / 5 * 100)}%;background:var(${b})"></div><span>${v.toFixed(2)}%</span></div>`).join("");
     }
-    function renderAll() { renderP(); renderH(); renderW(); renderC(); renderSum(); diverge(); }
-    function showError(msg) { document.querySelector("main").insertAdjacentHTML("afterbegin", `<p class="ctx"><b>Backend connection:</b> ${msg}. Start the backend using the README instructions.</p>`); }
+    function renderFindings() {
+      const report = PROJECT_FINDINGS;
+      if (!report) return;
+      const final = report.final_ubl;
+      const mari = report.final_mari;
+      const best = final.best_trained_model;
+      const fused = final.fused_model;
+      const mariTestBest = mari.best_test_model;
+      const mariWfBest = mari.best_walk_forward_model;
+      const h1Best = "News-only";
+      $("#finding-summary").innerHTML =
+        `<div class="stat"><b>${esc(best.name)} · ${best.walk_forward_mape.toFixed(2)}%</b><span>Lowest walk-forward MAPE among main-branch UBL configurations</span></div>` +
+        `<div class="stat"><b>${esc(mariTestBest.name)} · ${mariTestBest.fixed_split_mape.toFixed(2)}%</b><span>Lowest mean test MAPE among the MARI ablation configurations</span></div>` +
+        `<div class="stat"><b>${esc(mariWfBest.name)} · ${mariWfBest.walk_forward_mape.toFixed(2)}%</b><span>Lowest MARI walk-forward MAPE in the saved summary</span></div>`;
+
+      $("#finding-coverage").innerHTML =
+        `<h3 style="font-size:18px">Project data coverage</h3>` +
+        `<div class="explorer-table-wrap"><table><thead><tr><th>Stock</th><th>Source dataset</th><th>Rows</th><th>Date coverage</th></tr></thead><tbody>` +
+        report.data_coverage.map(stock => stock.datasets.map(dataset =>
+          `<tr><td>${esc(stock.stock)}</td><td>${esc(dataset.name)}</td><td>${dataset.rows.toLocaleString()}</td><td>${esc(dataset.date_start || "–")} – ${esc(dataset.date_end || "–")}</td></tr>`
+        ).join("") + `<tr><td>${esc(stock.stock)}</td><td>Model evaluation</td><td colspan="2">${esc(stock.model_results_note)}</td></tr>`
+        ).join("") +
+        `</tbody></table></div><p class="note">These are source-data and artifact row counts, not counts of model-ready examples. UBL and MARI data and results are kept separate.</p>`;
+
+      const horizonModels = [
+        ["naive", "No-change baseline"],
+        ["price_only", "Price-only"],
+        ["news_only", "News-only"],
+        ["fundamentals_only", "Fundamentals-only"],
+      ];
+      const ublHorizonRows = report.horizons.flatMap(row => horizonModels.map(([key, name]) =>
+        `<tr><td>${row.days} trading day${row.days === 1 ? "" : "s"}</td><td>${name}</td><td>${row.test_rows}</td>` +
+        `<td>${row[key].mae.toFixed(3)}</td><td>${row[key].rmse.toFixed(3)}</td><td>${row[key].mape.toFixed(3)}%</td></tr>`
+      )).join("");
+      const mariStep = mari.single_step;
+      const mariMetrics = mariStep.metrics;
+      const mariHorizonRow =
+        `<tr><td>1 trading day</td><td>MARI · ${esc(mari.selected_model)}</td><td>${mariStep.n_predictions}</td>` +
+        `<td>${mariMetrics.MAE.toFixed(3)}</td><td>${mariMetrics.RMSE.toFixed(3)}</td><td>${mariMetrics.MAPE.toFixed(3)}%</td></tr>`;
+      const sourceLinks = report.horizon_sources.map(source =>
+        `<a href="${esc(source.url)}" target="_blank" rel="noopener">${esc(source.name)} · ${esc(source.branch)}</a>`
+      ).join(" · ");
+      $("#finding-horizons").innerHTML =
+        `<h3 style="font-size:18px">Available horizon evaluations</h3>` +
+        `<p>${esc(report.horizon_evaluation)}</p>` +
+        `<div class="explorer-table-wrap"><table><thead><tr><th>Horizon</th><th>Run</th><th>Test rows</th><th>MAE (PKR)</th><th>RMSE (PKR)</th><th>MAPE</th></tr></thead><tbody>${ublHorizonRows}${mariHorizonRow}</tbody></table></div>` +
+        `<p class="note">The 5-, 10-, and 21-day rows above come from UBL modality-only notebook outputs. MARI has saved one-step walk-forward pairs only; no MARI multi-day prediction series is available. Sources: ${sourceLinks}.</p>`;
+
+      const ublWalkRows = final.walk_forward_models.map(model =>
+        `<tr><td>UBL</td><td>${esc(model.name)}</td><td>${esc(model.features)}</td><td>${model.walk_forward_mae.toFixed(2)}</td>` +
+        `<td>${model.walk_forward_rmse.toFixed(2)}</td><td>${model.walk_forward_mape.toFixed(2)}%</td>` +
+        `<td>${model.folds_beating_naive_mae}/${model.folds_total}</td></tr>`
+      ).join("");
+      const mariWalkRows = mari.walk_forward_models.map(model =>
+        `<tr><td>MARI</td><td>${esc(model.name)}</td><td>${esc(model.features)}</td><td>${model.walk_forward_mae.toFixed(2)}</td>` +
+        `<td>${model.walk_forward_rmse.toFixed(2)}</td><td>${model.walk_forward_mape.toFixed(2)}%</td>` +
+        `<td>${model.folds_beating_naive_mae}/${model.folds_total}</td></tr>`
+      ).join("");
+      $("#finding-consistency").innerHTML =
+        `<h3 style="font-size:18px">Walk-forward consistency by stock</h3>` +
+        `<div class="explorer-table-wrap"><table><thead><tr><th>Stock</th><th>Model</th><th>Feature configuration</th><th>MAE (PKR)</th><th>RMSE (PKR)</th><th>MAPE</th><th>Folds beating naive MAE</th></tr></thead><tbody>${ublWalkRows}${mariWalkRows}</tbody></table></div>` +
+        `<p class="note">UBL has ${final.fold_count} rolling test folds; MARI has ${mari.fold_count}. Fold wins count only when a model's MAE is strictly below that fold's repeat-yesterday baseline. Training/validation window details were not present in the MARI files.</p>`;
+
+      $("#finding-observations").innerHTML =
+        `<h3 style="font-size:18px">Project observations</h3>` +
+        `<ul><li>In the saved direct-holdout horizon runs, MAPE rises as the horizon lengthens for the naive baseline and all three modality-only models.</li>` +
+        `<li>${esc(h1Best)} has the lowest MAPE among the modality-only horizon models at each horizon, but it does not beat the no-change baseline.</li>` +
+        `<li>Among main-branch trained UBL models, <b>${esc(best.name)}</b> has the lowest walk-forward MAPE (${best.walk_forward_mape.toFixed(2)}%). The all-feature fused model records ${fused.walk_forward_mape.toFixed(2)}% versus ${final.naive_baseline.MAPE.toFixed(2)}% for the same evaluation's naive baseline.</li>` +
+        `<li>Among MARI held-out test configurations, <b>${esc(mariTestBest.name)}</b> has the lowest mean MAPE (${mariTestBest.fixed_split_mape.toFixed(2)}%). Among MARI walk-forward summaries, <b>${esc(mariWfBest.name)}</b> has the lowest MAPE (${mariWfBest.walk_forward_mape.toFixed(2)}%). These are protocol-specific rankings, not causal feature-contribution claims.</li>` +
+        `<li>The MARI files support one-step walk-forward evaluation only. The prediction series does not contain 5-, 10-, or 21-day targets.</li></ul>`;
+
+      $("#finding-limitations").innerHTML =
+        `<h3 style="font-size:18px">Limitations</h3><ul>${report.limitations.map(item => `<li>${esc(item)}</li>`).join("")}</ul>` +
+        `<p class="note">The multi-horizon UBL rows are separate single-modality notebook studies with direct chronological holdouts. UBL and MARI walk-forward metrics are reported from their respective artifacts and are not ranked as if their test protocols were identical.</p>`;
+    }
+    async function loadProjectFindings() {
+      try {
+        PROJECT_FINDINGS = await ubl.findings();
+        renderFindings();
+      } catch (error) {
+        $("#finding-summary").innerHTML = `<p class="empty-state">Project findings could not be loaded: ${esc(error.message)}</p>`;
+      }
+    }
+    function datasetParams() {
+      return {
+        search: $("#dataset-search").value.trim(),
+        search_column: $("#dataset-search-column").value,
+        date_column: $("#dataset-date-column").value,
+        date_from: $("#dataset-from").value,
+        date_to: $("#dataset-to").value,
+        numeric_column: $("#dataset-number-column").value,
+        min_value: $("#dataset-min").value,
+        max_value: $("#dataset-max").value,
+        sort_by: $("#dataset-sort-column").value,
+        sort_order: $("#dataset-sort-order").value,
+      };
+    }
+    function setSelectOptions(selector, items, placeholder, selected = "") {
+      const select = $(selector);
+      select.innerHTML = `<option value="">${esc(placeholder)}</option>` + items.map(item =>
+        `<option value="${esc(item.value)}">${esc(item.label)}</option>`).join("");
+      select.value = items.some(item => item.value === selected) ? selected : "";
+    }
+    function renderDatasetPage(data) {
+      const columns = data.columns || [];
+      const selectedDate = $("#dataset-date-column").value;
+      const selectedNumber = $("#dataset-number-column").value;
+      const selectedSearch = $("#dataset-search-column").value;
+      const selectedSort = $("#dataset-sort-column").value;
+      setSelectOptions("#dataset-search-column", columns.map(c => ({ value: c.name, label: c.name })), "All columns", selectedSearch);
+      setSelectOptions("#dataset-date-column", (data.date_columns || []).map(c => ({ value: c, label: c })), "Date range off", selectedDate || (data.date_columns || [])[0] || "");
+      setSelectOptions("#dataset-number-column", columns.filter(c => c.type === "number").map(c => ({ value: c.name, label: c.name })), "No numeric range", selectedNumber);
+      setSelectOptions("#dataset-sort-column", columns.map(c => ({ value: c.name, label: c.name })), "Source order", selectedSort);
+      const missing = Object.values(data.missing_values || {}).reduce((sum, value) => sum + value, 0);
+      const coverage = Object.entries(data.date_coverage || {}).map(([name, range]) =>
+        `${esc(name)}: ${esc(range.start)} to ${esc(range.end)}`).join(" · ") || "No date column detected";
+      const missingDetails = Object.entries(data.missing_values || {}).filter(([, count]) => count > 0)
+        .map(([name, count]) => `${esc(name)}: ${count.toLocaleString()}`).join(" · ");
+      $("#dataset-stats").innerHTML = `<div class="stat"><b>${data.row_count.toLocaleString()}</b><span>Total rows</span></div><div class="stat"><b>${data.column_count}</b><span>Columns</span></div><div class="stat"><b>${data.filtered_count.toLocaleString()}</b><span>Rows after filters</span></div><div class="stat"><b>${missing.toLocaleString()}</b><span>Missing cells in full dataset</span></div>`;
+      $("#dataset-coverage").textContent = `Date coverage · ${coverage}`;
+      $("#dataset-missing-detail").textContent = `Missing by column · ${missingDetails || "None detected"}`;
+      if (!data.rows.length) {
+        $("#dataset-table").innerHTML = '<p class="empty-state">No rows match the current filters.</p>';
+      } else {
+        const names = columns.map(c => c.name);
+        const header = names.map(name => `<th>${esc(name)}<br><span class="note">${esc(columns.find(c => c.name === name).type)}</span></th>`).join("");
+        const body = data.rows.map(row => `<tr>${names.map(name => {
+          const value = row[name];
+          const text = value == null ? "" : String(value);
+          const display = text.length > 180 ? `${text.slice(0, 177)}…` : text;
+          return `<td title="${esc(text)}">${esc(display)}</td>`;
+        }).join("")}</tr>`).join("");
+        $("#dataset-table").innerHTML = `<table class="explorer-table"><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
+      }
+      $("#dataset-page-label").textContent = `Page ${data.page} of ${data.total_pages} · ${data.page_size} rows per page`;
+      $("#dataset-prev").disabled = data.page <= 1;
+      $("#dataset-next").disabled = data.page >= data.total_pages;
+      $("#dataset-status").textContent = `Showing actual rows from ${$("#dataset-select").selectedOptions[0]?.textContent || data.dataset}.`;
+    }
+    async function loadDatasetPage() {
+      const id = $("#dataset-select").value;
+      if (!id) return;
+      $("#dataset-status").textContent = "Loading dataset…";
+      try {
+        const result = await ubl.datasetPage(id, { ...datasetParams(), page: DATASET_PAGE, page_size: 25 });
+        renderDatasetPage(result);
+      } catch (error) {
+        $("#dataset-status").textContent = `Dataset error: ${error.message}`;
+        $("#dataset-table").innerHTML = '<p class="empty-state">Could not load this dataset. Check the API response above.</p>';
+      }
+    }
+    async function loadDatasetCatalog() {
+      const datasets = await ubl.datasets();
+      $("#dataset-select").innerHTML = datasets.map(d => `<option value="${esc(d.id)}">${esc(d.ticker)} · ${esc(d.label)} (${d.rows.toLocaleString()} rows)</option>`).join("");
+      if (datasets.some(d => d.id === "ubl-fused")) $("#dataset-select").value = "ubl-fused";
+      await loadDatasetPage();
+    }
+    function renderAll() { renderP(); renderH(); renderW(); renderC(); renderSum(); diverge(); renderMarket(); }
+    function showError(msg) { $("#stock-context").textContent = `Backend error: ${msg}`; }
     /* ---------- wiring ---------- */
     $("#tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; document.querySelectorAll("#tabs button").forEach(x => x.setAttribute("aria-selected", x === b)); document.querySelectorAll("section").forEach(s => s.classList.toggle("on", s.id === b.dataset.t)) });
-    ["#from", "#to"].forEach(s => $(s).addEventListener("change", renderP));
-    $("#model").addEventListener("change", e => loadPredictions(e.target.value).catch(showError));
+    ["#from", "#to"].forEach(s => $(s).addEventListener("change", () => { renderP(); renderH(); }));
+    $("#model").addEventListener("change", async e => {
+      try {
+        await loadPredictions(e.target.value);
+        if (selectedStock === "MARI") {
+          API_DATA = await apiGet(`/api/dashboard/MARI?model=${encodeURIComponent(e.target.value)}`);
+        }
+        renderAll();
+      } catch (error) {
+        showError(error.message);
+      }
+    });
     ["#mfrom", "#mto"].forEach(s => $(s).addEventListener("change", renderMarket));
     document.querySelectorAll(".stk[data-stock]").forEach(b => b.addEventListener("click", async () => {
       document.querySelectorAll(".stk").forEach(x => x.classList.toggle("on", x === b));
-      try { await loadStock(b.dataset.stock); $("#stock-context").textContent = `${selectedStock}: walk-forward backtest results (historical, not live forecasts).` }
+      try { await loadStock(b.dataset.stock); }
       catch (e) { showError(e.message) }
     }));
+    $("#dataset-select").addEventListener("change", () => {
+      DATASET_PAGE = 1;
+      ["#dataset-search", "#dataset-from", "#dataset-to", "#dataset-min", "#dataset-max"].forEach(s => { $(s).value = ""; });
+      loadDatasetPage();
+    });
+    $("#dataset-apply").addEventListener("click", () => { DATASET_PAGE = 1; loadDatasetPage(); });
+    $("#dataset-prev").addEventListener("click", () => { DATASET_PAGE = Math.max(1, DATASET_PAGE - 1); loadDatasetPage(); });
+    $("#dataset-next").addEventListener("click", () => { DATASET_PAGE += 1; loadDatasetPage(); });
+    $("#dataset-download").addEventListener("click", () => {
+      const id = $("#dataset-select").value;
+      if (id) window.location.assign(ubl.datasetCsvUrl(id, datasetParams()));
+    });
     (async () => {
       try {
         await loadStock("UBL");
-        const models = await ubl.models();
-        $("#model").innerHTML = models.map(m => `<option>${m}</option>`).join("");
-        $("#model").value = "All-4 fused";
-        await loadPredictions($("#model").value);
-        const [daily, arts] = await Promise.all([ubl.newsDaily(), ubl.newsArticles(null, 15)]);
-        renderNews(daily, arts);
-        await loadMarket();
-        $("#stock-context").textContent = "UBL: walk-forward backtest results (historical, not live forecasts).";
       } catch (e) { showError(e.message); }
+      try { await loadDatasetCatalog(); }
+      catch (e) { $("#dataset-status").textContent = `Dataset catalog error: ${e.message}`; }
+      await loadProjectFindings();
     })();
   </script>
 </body>

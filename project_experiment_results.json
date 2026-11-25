@@ -1,0 +1,58 @@
+{
+  "stock": "UBL",
+  "evaluation": "Direct, horizon-specific chronological holdout results from the saved modality-only branch notebooks. Model B predicts log return; the naive model repeats the current close. The final fused model is evaluated separately in the main branch walk-forward artifacts.",
+  "horizon_sources": [
+    {
+      "name": "Price-only",
+      "branch": "feature/price-pipeline",
+      "notebook": "ubl-price-multihorizon.ipynb",
+      "url": "https://github.com/rabiazulfiqar1/PSX_Multimodal_DeepFusion_PricePrediction/blob/feature/price-pipeline/ubl-price-multihorizon.ipynb"
+    },
+    {
+      "name": "News-only",
+      "branch": "feature/news-pipeline",
+      "notebook": "news-mlp-multihorizon.ipynb",
+      "url": "https://github.com/rabiazulfiqar1/PSX_Multimodal_DeepFusion_PricePrediction/blob/feature/news-pipeline/news-mlp-multihorizon.ipynb"
+    },
+    {
+      "name": "Fundamentals-only",
+      "branch": "feat/fundamental-pipeline",
+      "notebook": "fundamentals_multihorizon.ipynb",
+      "url": "https://github.com/rabiazulfiqar1/PSX_Multimodal_DeepFusion_PricePrediction/blob/feat/fundamental-pipeline/fundamentals_multihorizon.ipynb"
+    }
+  ],
+  "horizons": [
+    {
+      "days": 1,
+      "test_rows": 177,
+      "naive": {"mae": 7.859, "rmse": 11.103, "mape": 1.944},
+      "price_only": {"mae": 8.615, "rmse": 12.157, "mape": 2.132},
+      "news_only": {"mae": 8.156, "rmse": 11.287, "mape": 2.011},
+      "fundamentals_only": {"mae": 8.484, "rmse": 11.541, "mape": 2.094}
+    },
+    {
+      "days": 5,
+      "test_rows": 173,
+      "naive": {"mae": 19.218, "rmse": 25.889, "mape": 4.704},
+      "price_only": {"mae": 20.346, "rmse": 27.290, "mape": 4.975},
+      "news_only": {"mae": 19.622, "rmse": 26.215, "mape": 4.792},
+      "fundamentals_only": {"mae": 20.361, "rmse": 26.967, "mape": 5.007}
+    },
+    {
+      "days": 10,
+      "test_rows": 168,
+      "naive": {"mae": 26.804, "rmse": 37.340, "mape": 6.552},
+      "price_only": {"mae": 30.653, "rmse": 39.616, "mape": 7.525},
+      "news_only": {"mae": 27.635, "rmse": 37.497, "mape": 6.784},
+      "fundamentals_only": {"mae": 56.854, "rmse": 66.478, "mape": 14.124}
+    },
+    {
+      "days": 21,
+      "test_rows": 157,
+      "naive": {"mae": 46.792, "rmse": 60.568, "mape": 11.480},
+      "price_only": {"mae": 49.592, "rmse": 65.736, "mape": 12.355},
+      "news_only": {"mae": 46.509, "rmse": 60.996, "mape": 11.496},
+      "fundamentals_only": {"mae": 91.627, "rmse": 109.684, "mape": 23.299}
+    }
+  ]
+}

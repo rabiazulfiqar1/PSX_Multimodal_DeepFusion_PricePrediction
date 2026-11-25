@@ -26,8 +26,17 @@ pip-wheel-metadata/
 .vscode/
 .idea/
 
-# Data files
-data/
+# Data files. Keep only the per-stock artifact layout scaffold in version control.
+data/*
+!data/artifacts/
+data/artifacts/*
+!data/artifacts/README.md
+!data/artifacts/UBL/
+!data/artifacts/MARI/
+data/artifacts/UBL/*
+data/artifacts/MARI/*
+!data/artifacts/UBL/.gitkeep
+!data/artifacts/MARI/.gitkeep
 *.csv
 *.xlsx
 *.xls
